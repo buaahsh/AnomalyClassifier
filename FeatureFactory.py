@@ -2,7 +2,6 @@
 
 
 import argparse
-from collections import Counter
 
 
 class FlowV5():
@@ -22,7 +21,30 @@ class FlowV5():
             self.isIcmp = 1
 
 
-def outputFeaure(outputFile, _dict, isSourceKey):
+def loadLabelFile(isSourceKey, labelFile):
+    _dict = {}
+    print "Loading label file..."
+    with open(labelFile, 'r') as fIn:
+        i = 0
+        for line in fIn:
+            i += 1
+            if i == 1:
+                continue
+            tokens = line.strip().split(",")
+            if len(tokens) != 9:
+                continue
+            key = tokens[1]
+            if not isSourceKey:
+                key = tokens[3]
+            if not key:
+                continue
+            tax = tokens[5]
+            c = tokens[-1]
+            _dict[key] = [tax, c]
+    return _dict
+
+
+def outputFeaure(outputFile, _dict, isSourceKey, mode, labelFile):
     """
     Convert into features, the format of feature is:
     key,isSourceKey,
@@ -65,50 +87,70 @@ def outputFeaure(outputFile, _dict, isSourceKey):
                 nICMPPkt * 1.0 / nPkts,
                 nSYN * 1.0 / nFlows]
 
-    for k in _dict:
-        flows = _dict[k]
-        features = convert2feaure(flows)
-        features = [str(f) for f in features]
-        print >>outputFile,  "%s,%s" % (k, ",".join(features))
+    if mode == "f":
+        for k in _dict:
+            flows = _dict[k]
+            features = convert2feaure(flows)
+            features = [str(f) for f in features]
+            print >>outputFile,  "%s,%s" % (k, ",".join(features))
+    elif mode == "l":
+        labelDict = loadLabelFile(isSourceKey, labelFile)
+        inNum = 0
+        for k in _dict:
+            flows = _dict[k]
+            features = convert2feaure(flows)
+            features = [str(f) for f in features]
+            tax = ""
+            if k in labelDict:
+                tax = labelDict[k][0]
+                inNum += 1
+            print >>outputFile,  "%s,%s,%s" % (k, ",".join(features), tax)
+        print >>outputFile, "#%d,%d" % (len(labelDict), len(labelDict) - inNum)
 
 
-def buildFearueFile(inputFile, outputFile, isSourceKey):
+def buildFearueFile(inputFile, outputFile, isSourceKey, mode, labelFile):
     _dict = {}
     num = 0
-    for line in inputFile:
-        num += 1
-        if num % 100000 == 0:
-            print num
-        tokens = line.split(",")
-        if len(tokens) != 8:
-            continue
-        flow = FlowV5(tokens)
-        if flow.pkts < 10:
-            continue
-        key = flow.srcAdd
-        if not isSourceKey:
-            key = flow.dstAdd
-        if key in _dict:
-            _dict[key].append(flow)
-        else:
-            _dict[key] = [flow]
-    outputFeaure(outputFile, _dict, isSourceKey)
+    with open(outputFile, 'w') as fOut:
+        with open(inputFile, 'r') as fIn:
+            for line in fIn:
+                num += 1
+                if num % 100000 == 0:
+                    print num, " lines..."
+                tokens = line.strip().split(",")
+                if len(tokens) != 8:
+                    continue
+                flow = FlowV5(tokens)
+                if flow.pkts < 10:
+                    continue
+                key = flow.srcAdd
+                if not isSourceKey:
+                    key = flow.dstAdd
+                if key in _dict:
+                    _dict[key].append(flow)
+                else:
+                    _dict[key] = [flow]
+        outputFeaure(fOut, _dict, isSourceKey, mode, labelFile)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--mode",
+                        help="mode, f: build features file; l:with label data",
+                        default="f")
     parser.add_argument("-i", "--input", help="input file")
+    parser.add_argument("-l", "--label", help="labeled file")
     parser.add_argument("-o", "--output", help="output file")
     parser.add_argument("-k", "--key", help="aggregation key", default="src")
 
     args = parser.parse_args()
     print "Args :", args
+    mode = args.mode
     inputFile = args.input
+    labelFile = args.label
     outputFile = args.output
     isSourceKey = True
     if args.key != "src":
         isSourceKey = False
 
-    with open(outputFile, 'w') as fOut:
-        with open(inputFile, 'r') as fIn:
-            buildFearueFile(fIn, fOut, isSourceKey)
+    buildFearueFile(inputFile, outputFile, isSourceKey, mode, labelFile)
