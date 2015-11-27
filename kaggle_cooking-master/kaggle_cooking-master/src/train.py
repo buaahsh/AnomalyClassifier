@@ -7,7 +7,7 @@ __author__ = "David McGarry"
 
 import pandas as pd
 import numpy as np
-import xgboost as xgb
+# import xgboost as xgb
 import cPickle as pickle
 from sklearn.cross_validation import KFold
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -146,7 +146,7 @@ grid_glm = {
 pipe_xgb = Pipeline([
     ('tfidf', TfidfVectorizer(strip_accents='unicode',
         tokenizer=LemmaTokenizer())),
-    ('model', xgb.XGBClassifier())
+    # ('model', xgb.XGBClassifier())
 ])
 grid_xgb = {
     'greek':{
@@ -337,7 +337,7 @@ pipe_xgb_final = Pipeline([
     ])),
     ('scl', StandardScaler(copy=True, with_mean=True, with_std=True)),
     ('feat', SelectKBest(f_classif)),
-    ('model',xgb.XGBClassifier())
+    # ('model',xgb.XGBClassifier())
 ])
 grid_xgb_final = {
     'union__lsa__svd__n_components':[50],
@@ -387,29 +387,29 @@ def main():
     # train ingredient model
     print "Ingredient Model"
     ingred_pred, ingred_model = trainIngredient(ingred_pipe,ingred_grid,train,cv,n_jobs=-1)
-    train = train.join(pd.DataFrame(ingred_pred))
+    # train = train.join(pd.DataFrame(ingred_pred))
 
-    # train text models
-    text_models = {}
-    for v in [encoder.inverse_transform(v) for v in train.cuisine.unique()]:
-        print "\nText Model: %s" % v
-        train['pred_text_'+v], text_models[v] = trainText(pipe_glm,grid_glm[v],pipe_xgb,grid_xgb[v],train.ingredients,train.cuisine.apply(lambda x: 1 if x == encoder.transform(v) else 0),cv,n_jobs=-1)
+    # # train text models
+    # text_models = {}
+    # for v in [encoder.inverse_transform(v) for v in train.cuisine.unique()]:
+    #     print "\nText Model: %s" % v
+    #     train['pred_text_'+v], text_models[v] = trainText(pipe_glm,grid_glm[v],pipe_xgb,grid_xgb[v],train.ingredients,train.cuisine.apply(lambda x: 1 if x == encoder.transform(v) else 0),cv,n_jobs=-1)
 
-    # train feature models
-    print "\nFeature Model: xgb"
-    xgb_pred, recipe_model_xgb = trainFeatureModel(train,train.cuisine,pipe_xgb_final,grid_xgb_final,cv)
-    print "\nFeature Model: rf"
-    rf_pred, recipe_model_rf = trainFeatureModel(train,train.cuisine,pipe_rf_final,grid_rf_final,cv)
+    # # train feature models
+    # print "\nFeature Model: xgb"
+    # xgb_pred, recipe_model_xgb = trainFeatureModel(train,train.cuisine,pipe_xgb_final,grid_xgb_final,cv)
+    # print "\nFeature Model: rf"
+    # rf_pred, recipe_model_rf = trainFeatureModel(train,train.cuisine,pipe_rf_final,grid_rf_final,cv)
 
-    # blend feature models into final recipe model
-    final_model = RecipeModel(ingred_model,text_models,recipe_model_xgb,recipe_model_rf,encoder)
-    final_model.set_weights(xgb_pred,rf_pred,train.cuisine)
-    print final_model
+    # # blend feature models into final recipe model
+    # final_model = RecipeModel(ingred_model,text_models,recipe_model_xgb,recipe_model_rf,encoder)
+    # final_model.set_weights(xgb_pred,rf_pred,train.cuisine)
+    # print final_model
 
-    #make predictions
-    test = loadTestSet()
-    test['cuisine'] = final_model.predict_kaggle(test)
-    test[['id','cuisine']].to_csv("../data/pred.csv",index=False)
+    # #make predictions
+    # test = loadTestSet()
+    # test['cuisine'] = final_model.predict_kaggle(test)
+    # test[['id','cuisine']].to_csv("../data/pred.csv",index=False)
 
 
 

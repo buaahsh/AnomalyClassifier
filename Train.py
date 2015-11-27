@@ -9,7 +9,7 @@ from sklearn.svm import SVC
 
 pipe = Pipeline([
     # ('feat', SelectPercentile(chi2)),
-    ('model', SVC())
+    ('model', SVC(probability=True))
 ])
 
 grid = {
@@ -22,12 +22,23 @@ grid = {
 def main():
     # load data
     #train, encoder = loadTrainSet()
-    train = [[0], [1], [2], [3]]
-    target = [0, 1, 2, 3]
-    cv = KFold(4, n_folds=2, shuffle=True)
-    print list(cv)[0]
-
-    # pred, model = trainSklearn(pipe,grid,train,target,cv,n_jobs=2)
+    train, target, encoder = loadTrainSet()
+    print train.shape[0]
+    # cv = KFold(train.shape[0], n_folds=1, shuffle=True)
+    # # print list(cv)[0]
+    # cv = list(cv)
+    # tr = cv[0][0]
+    # vl = cv[0][1]
+    model = SVC(probability=True).fit(train,target)
+    z = {"pred": model.predict_proba(train), "index":0}
+    from numpy import zeros
+    print target[0].unique().shape[0]
+    pred = zeros((train.shape[0], target[0].unique().shape[0]))
+    print z['pred'].shape
+    print pred[z['index'],:].shape
+    pred[z['index'],:] = z['pred']
+    score = score_func(target,pred.argmax(1))
+    # pred, model = trainSklearn(pipe,grid,train,target,cv,n_jobs=2,multi=True)
 
 if __name__ == "__main__":
     main()

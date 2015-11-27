@@ -326,7 +326,10 @@ def trainIngredient(model,grid,train,cv,refit=True,n_jobs=5):
     from sklearn.grid_search import ParameterGrid
     from numpy import zeros
     from sklearn.metrics import accuracy_score
+    print type(train.cuisine)
+    print train.cuisine.unique().shape[0]
     pred = zeros((train.shape[0],train.cuisine.unique().shape[0]))
+    return 
     best_score = 0
     for g in ParameterGrid(grid):
         model.set_params(**g)
