@@ -88,6 +88,7 @@ def outputFeaure(outputFile, _dict, isSourceKey, mode, labelFile):
                 nSYN * 1.0 / nFlows]
 
     if mode == "f":
+        print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows"
         for k in _dict:
             flows = _dict[k]
             features = convert2feaure(flows)
@@ -96,6 +97,7 @@ def outputFeaure(outputFile, _dict, isSourceKey, mode, labelFile):
     elif mode == "l":
         labelDict = loadLabelFile(isSourceKey, labelFile)
         inNum = 0
+        print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows,label"
         for k in _dict:
             flows = _dict[k]
             features = convert2feaure(flows)
