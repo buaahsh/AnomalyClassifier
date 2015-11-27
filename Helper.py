@@ -7,23 +7,24 @@ class FeatureItem(object):
         self.arg = line
 
 
-def fitSklearn(X,y,cv,i,model,multi=False):
+def fitSklearn(X, y, cv, i, model, multi=False):
     """
     Train a sklearn pipeline or model -- wrapper to enable parallel CV.
     """
     tr = cv[i][0]
     vl = cv[i][1]
-    model.fit(X.iloc[tr],y.iloc[tr])
+    model.fit(X.iloc[tr], y.iloc[tr])
     if multi:
-        return  {"pred": model.predict_proba(X.iloc[vl]), "index":vl}
+        return {"pred": model.predict_proba(X.iloc[vl]), "index": vl}
     else:
-        return  {"pred": model.predict_proba(X.iloc[vl])[:,1], "index":vl}
+        return {"pred": model.predict_proba(X.iloc[vl])[:, 1], "index": vl}
 
-def trainSklearn(model,grid,train,target,cv,refit=True,n_jobs=5,multi=False):
+
+def trainSklearn(model, grid, train, target, cv, refit=True, n_jobs=5, multi=False):
     """
     Train a sklearn pipeline or model using textual data as input.
     """
-    from joblib import Parallel, delayed   
+    from joblib import Parallel, delayed
     from sklearn.grid_search import ParameterGrid
     from numpy import zeros
     if multi:
@@ -38,27 +39,29 @@ def trainSklearn(model,grid,train,target,cv,refit=True,n_jobs=5,multi=False):
     best_score = 0
     for g in ParameterGrid(grid):
         model.set_params(**g)
-        if len([True for x in g.keys() if x.find('nthread') != -1 ]) > 0:
-            results = [fitSklearn(train,target,list(cv),i,model,multi) for i in range(cv.n_folds)]
+        if len([True for x in g.keys() if x.find('nthread') != -1]) > 0:
+            results = [
+                fitSklearn(train, target, list(cv), i, model, multi) for i in range(cv.n_folds)]
         else:
-            results = Parallel(n_jobs=n_jobs)(delayed(fitSklearn)(train,target,list(cv),i,model,multi) for i in range(cv.n_folds))
+            results = Parallel(n_jobs=n_jobs)(delayed(fitSklearn)(
+                train, target, list(cv), i, model, multi) for i in range(cv.n_folds))
         if multi:
             for i in results:
-                pred[i['index'],:] = i['pred']
-            score = score_func(target,pred.argmax(1))
+                pred[i['index'], :] = i['pred']
+            score = score_func(target, pred.argmax(1))
         else:
             for i in results:
                 pred[i['index']] = i['pred']
-            score = score_func(target,pred)
+            score = score_func(target, pred)
         if score > best_score:
             best_score = score
             best_pred = pred.copy()
             best_grid = g
-    print "Best Score: %0.5f" % best_score 
+    print "Best Score: %0.5f" % best_score
     print "Best Grid", best_grid
     if refit:
         model.set_params(**best_grid)
-        model.fit(train,target)
+        model.fit(train, target)
     return best_pred, model
 
 
