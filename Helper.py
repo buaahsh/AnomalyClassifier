@@ -7,7 +7,17 @@ class FeatureItem(object):
         self.arg = line
 
 
-def fitSklearn(X, y, cv, i, model, multi=False):
+def fitSklearnAll(X, y, model, multi=False):
+    """
+    Train a sklearn pipeline or model
+    """
+    model.fit(X, y)
+    if multi:
+        return {"pred": model.predict_proba(X), "index": 0}
+    else:
+        return {"pred": model.predict_proba(X)[:, 1], "index": 0}
+
+def fitSklearnCV(X, y, cv, i, model, multi=False):
     """
     Train a sklearn pipeline or model -- wrapper to enable parallel CV.
     """
@@ -39,20 +49,25 @@ def trainSklearn(model, grid, train, target, cv, refit=True, n_jobs=5, multi=Fal
     best_score = 0
     for g in ParameterGrid(grid):
         model.set_params(**g)
-        if len([True for x in g.keys() if x.find('nthread') != -1]) > 0:
-            results = [
-                fitSklearn(train, target, list(cv), i, model, multi) for i in range(cv.n_folds)]
+        if cv:
+            if len([True for x in g.keys() if x.find('nthread') != -1]) > 0:
+                results = [
+                    fitSklearnCV(train, target, list(cv), i, model, multi) for i in range(cv.n_folds)]
+            else:
+                results = Parallel(n_jobs=n_jobs)(delayed(fitSklearnCV)(
+                    train, target, list(cv), i, model, multi) for i in range(cv.n_folds))
+            if multi:
+                for i in results:
+                    pred[i['index'], :] = i['pred']
+                score = score_func(target, pred.argmax(1))
+            else:
+                for i in results:
+                    pred[i['index']] = i['pred']
+                score = score_func(target, pred)
         else:
-            results = Parallel(n_jobs=n_jobs)(delayed(fitSklearn)(
-                train, target, list(cv), i, model, multi) for i in range(cv.n_folds))
-        if multi:
-            for i in results:
-                pred[i['index'], :] = i['pred']
-            score = score_func(target, pred.argmax(1))
-        else:
-            for i in results:
-                pred[i['index']] = i['pred']
-            score = score_func(target, pred)
+            results = fitSklearnAll(train, target, model, multi)
+            if multi:
+                score = score_func(target, results['pred'].argmax(1))
         if score > best_score:
             best_score = score
             best_pred = pred.copy()

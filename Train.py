@@ -22,17 +22,18 @@ def main():
     # load data
     train, target, encoder = loadTrainSet()
     # cv = KFold(train.shape[0], n_folds=1, shuffle=True)
-    # pred, model = trainSklearn(pipe,grid,train,target,cv,n_jobs=2,multi=True)
+    cv = None
+    pred, model = trainSklearn(pipe,grid,train,target,cv,n_jobs=2,multi=True)
 
-    model = SVC(probability=True).fit(train,target)
-    z = {"pred": model.predict_proba(train), "index":0}
-    from numpy import zeros
-    from sklearn.metrics import accuracy_score
-    pred = zeros((train.shape[0], target[0].unique().shape[0]))
+    # model = SVC(probability=True).fit(train,target)
+    # z = {"pred": model.predict_proba(train), "index":0}
+    # from numpy import zeros
+    # from sklearn.metrics import accuracy_score
+    # pred = zeros((train.shape[0], target[0].unique().shape[0]))
 
-    pred = z['pred']
-    score = accuracy_score(target,pred.argmax(1))
-    print score
+    # pred = z['pred']
+    # score = accuracy_score(target,pred.argmax(1))
+    # print score
     
 
 if __name__ == "__main__":
