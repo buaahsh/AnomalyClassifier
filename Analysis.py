@@ -29,7 +29,7 @@ def buildFearueFile(inputFile, outputFile, isSourceKey, labelFile=None):
     _dict = {}
     _label = {}
     if labelFile:
-        _label = loadLabelFile()
+        _label = loadLabelFile(isSourceKey, labelFile)
     num = 0
     n_jobs = 10
     batch_size = 100000
