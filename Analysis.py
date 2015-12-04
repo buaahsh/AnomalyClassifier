@@ -52,8 +52,6 @@ def buildFearueFile(inputFile, outputFile, isSourceKey, labelFile=None):
                                 _dict[k][1] += r[k][1]
                             else:
                                 _dict[k] = [r[k][0], r[k][1]]
-                    if num % 2000000 == 0:
-                        break
             if lines:
                 results += Parallel(n_jobs=n_jobs)(delayed(extractOne)(
                             lines[i:batch_size], isSourceKey, _label) for i in range(0, len(lines), batch_size))
