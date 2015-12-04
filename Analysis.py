@@ -25,8 +25,8 @@ def extractOne(lines, isSourceKey):
 def buildFearueFile(inputFile, outputFile, isSourceKey):
     _dict = {}
     num = 0
-    n_jobs = 4
-    batch_size = 200000
+    n_jobs = 10
+    batch_size = 100000
     from joblib import Parallel, delayed
     with open(outputFile, 'w') as fOut:
         with open(inputFile, 'r') as fIn:
@@ -46,6 +46,8 @@ def buildFearueFile(inputFile, outputFile, isSourceKey):
                                 _dict[k][1] += r[k][1]
                             else:
                                 _dict[k] = [r[k][0], r[k][1]]
+                    if num % 2000000 == 0:
+                        break
             if lines:
                 results += Parallel(n_jobs=n_jobs)(delayed(extractOne)(
                             lines[i:batch_size], isSourceKey) for i in range(0, len(lines), batch_size))
@@ -57,11 +59,11 @@ def buildFearueFile(inputFile, outputFile, isSourceKey):
                             else:
                                 _dict[k] = [r[k][0], r[k][1]]
         for k in _dict:
-            print >>fOut, "%s,%d,%d" % k, _dict[k][0], _dict[k][1]
+            print >>fOut, "%s,%d,%d" % (k, _dict[k][0], _dict[k][1])
 
 
 if __name__ == "__main__":
-    inputFile = "../csv.file"
+    inputFile = "../ad/data/csv.file"
     outputFile = "../f.file"
     isSourceKey = True
     buildFearueFile(inputFile, outputFile, isSourceKey)
