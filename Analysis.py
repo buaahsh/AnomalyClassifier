@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from FeatureFactory import FlowV5
+from FeatureFactory import loadLabelFile
 
-
-def extractOne(lines, isSourceKey):
+def extractOne(lines, isSourceKey, _label):
     _dict = {}
     for line in lines:
         tokens = line.strip().split(",")
@@ -14,6 +14,9 @@ def extractOne(lines, isSourceKey):
         key = flow.srcAdd
         if not isSourceKey:
             key = flow.dstAdd
+        if _label:
+            if key not in _label:
+                continue
         if key in _dict:
             _dict[key][0] += 1
             _dict[key][1] += flow.pkts
@@ -22,8 +25,11 @@ def extractOne(lines, isSourceKey):
     return _dict
 
 
-def buildFearueFile(inputFile, outputFile, isSourceKey):
+def buildFearueFile(inputFile, outputFile, isSourceKey, labelFile=None):
     _dict = {}
+    _label = {}
+    if labelFile:
+        _label = loadLabelFile()
     num = 0
     n_jobs = 10
     batch_size = 100000
@@ -37,7 +43,7 @@ def buildFearueFile(inputFile, outputFile, isSourceKey):
                 if num % 1000000 == 0:
                     print num, " lines..."
                     results = Parallel(n_jobs=n_jobs)(delayed(extractOne)(
-                        lines[i:i+batch_size], isSourceKey) for i in range(0, len(lines), batch_size))
+                        lines[i:i+batch_size], isSourceKey, _label) for i in range(0, len(lines), batch_size))
                     lines = []
                     for r in results:
                         for k in r:
@@ -50,7 +56,7 @@ def buildFearueFile(inputFile, outputFile, isSourceKey):
                         break
             if lines:
                 results += Parallel(n_jobs=n_jobs)(delayed(extractOne)(
-                            lines[i:batch_size], isSourceKey) for i in range(0, len(lines), batch_size))
+                            lines[i:batch_size], isSourceKey, _label) for i in range(0, len(lines), batch_size))
                 for r in results:
                         for k in r:
                             if k in _dict:
@@ -65,5 +71,6 @@ def buildFearueFile(inputFile, outputFile, isSourceKey):
 if __name__ == "__main__":
     inputFile = "../ad/data/csv.file"
     outputFile = "../f.file"
+    labelFile = "20150104_anomalous_suspicious.csv"
     isSourceKey = True
-    buildFearueFile(inputFile, outputFile, isSourceKey)
+    buildFearueFile(inputFile, outputFile, isSourceKey, labelFile)
