@@ -41,6 +41,7 @@ def loadLabelFile(isSourceKey, labelFile):
             tax = tokens[5]
             c = tokens[-1]
             _dict[key] = [tax, c]
+    print "# of labeled data is", len(_dict)
     return _dict
 
 
