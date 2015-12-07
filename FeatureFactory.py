@@ -87,32 +87,36 @@ def outputFeaure(outputFile, _dict, isSourceKey, mode, labelFile):
                 nICMPFlow * 1.0 / nFlows,
                 nICMPPkt * 1.0 / nPkts,
                 nSYN * 1.0 / nFlows]
-
     if mode == "f":
-        print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows"
+        print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows"
         for k in _dict:
             flows = _dict[k]
             features = convert2feaure(flows)
             features = [str(f) for f in features]
-            print >>outputFile,  "%s,%s" % (k, ",".join(features))
+            print >>outputFile,  "%s,%d,%s" % (
+                k, isSourceKey, ",".join(features))
     elif mode == "l":
         labelDict = loadLabelFile(isSourceKey, labelFile)
         inNum = 0
-        print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows,label"
+        if isSourceKey:
+            print >>outputFile, "key,isSourceKey,nSrcAdds,nSrcPorts,nDstAdds,nDstPortsnFlows,nFlows,nPkts,avgFlowsSize,avgPktSize,nICMP_nFlows,nICMP_nPkts,nSYN_nFlows,label"
         for k in _dict:
             flows = _dict[k]
             features = convert2feaure(flows)
             features = [str(f) for f in features]
-            tax = ""
+            tax = "normal"
             if k in labelDict:
                 tax = labelDict[k][0]
                 inNum += 1
-            print >>outputFile,  "%s,%s,%s" % (k, ",".join(features), tax)
+            print >>outputFile,  "%s,%d,%s,%s" % (
+                k, isSourceKey, ",".join(features), tax)
+        print "#%d,%d" % (len(labelDict), len(labelDict) - inNum)
         print >>outputFile, "#%d,%d" % (len(labelDict), len(labelDict) - inNum)
 
 
-def buildFearueFile(inputFile, outputFile, isSourceKey, mode, labelFile):
-    _dict = {}
+def buildFearueFile(inputFile, outputFile, mode, labelFile):
+    _dict_src = {}
+    _dict_dst = {}
     num = 0
     with open(outputFile, 'w') as fOut:
         with open(inputFile, 'r') as fIn:
@@ -124,16 +128,21 @@ def buildFearueFile(inputFile, outputFile, isSourceKey, mode, labelFile):
                 if len(tokens) != 8:
                     continue
                 flow = FlowV5(tokens)
-                if flow.pkts < 10:
+                if flow.pkts < 20:
                     continue
                 key = flow.srcAdd
-                if not isSourceKey:
-                    key = flow.dstAdd
-                if key in _dict:
-                    _dict[key].append(flow)
+                if key in _dict_src:
+                    _dict_src[key].append(flow)
                 else:
-                    _dict[key] = [flow]
-        outputFeaure(fOut, _dict, isSourceKey, mode, labelFile)
+                    _dict_src[key] = [flow]
+                key = flow.dstAdd
+                if key in _dict_dst:
+                    _dict_dst[key].append(flow)
+                else:
+                    _dict_dst[key] = [flow]
+
+        outputFeaure(fOut, _dict_src, 1, mode, labelFile)
+        outputFeaure(fOut, _dict_dst, 0, mode, labelFile)
 
 
 if __name__ == '__main__':
@@ -144,7 +153,6 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--input", help="input file")
     parser.add_argument("-l", "--label", help="labeled file")
     parser.add_argument("-o", "--output", help="output file")
-    parser.add_argument("-k", "--key", help="aggregation key", default="src")
 
     args = parser.parse_args()
     print "Args :", args
@@ -152,8 +160,5 @@ if __name__ == '__main__':
     inputFile = args.input
     labelFile = args.label
     outputFile = args.output
-    isSourceKey = True
-    if args.key != "src":
-        isSourceKey = False
 
-    buildFearueFile(inputFile, outputFile, isSourceKey, mode, labelFile)
+    buildFearueFile(inputFile, outputFile, mode, labelFile)
