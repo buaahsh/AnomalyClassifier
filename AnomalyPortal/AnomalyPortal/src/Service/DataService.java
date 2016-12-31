@@ -5,42 +5,35 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class DataService {
 	public SeriesItem[] series;
+	public static String Path = "/home/hsh/";
 	
-	@SuppressWarnings("deprecation")
-	public DataService(String fileName, String dateStr) throws ParseException{
-		series = new SeriesItem[2]; 
-				
-		String path = "/home/hsh/";
-		fileName = path.concat(fileName); 
+	private String DataCategory;
+	
+	public DataService(String dc, String dateStr){	
+		DataCategory = Path.concat(dc); 
+	}
+	
+	/**
+	 * 返回该数据类别下面的数据项，
+	 * @return
+	 * {id:name}
+	 */
+	public HashMap<String, String> LoadItems() {
+		HashMap<String, String> items = new HashMap();
 		
-		series[0] = LoadFile(fileName);
-		series[1] = LoadFile(path.concat("test2"));
-		
-		// Filter the series
-		
-		int year = Integer.parseInt(dateStr.split("/")[0]);
-		int month = Integer.parseInt(dateStr.split("/")[1]);
-		
-		for (SeriesItem seriesItem : series) {
-			for (Iterator<List<Float>> it=seriesItem.data.iterator(); it.hasNext();) {
-				List<Float> now = it.next();
-				Date nowDate = new Date(now.get(0).longValue());
-				
-				if (nowDate.getYear() + 1900 == year && nowDate.getMonth() + 1 == month)
-					continue;
-				
-		        it.remove(); // NOTE: Iterator's remove method, not ArrayList's, is used.
-			}
-		}
+		return items;
 	}
 	
 	public SeriesItem LoadFile(String fileName) {
