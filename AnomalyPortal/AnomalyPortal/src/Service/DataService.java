@@ -1,28 +1,25 @@
 package Service;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class DataService {
-	public SeriesItem[] series;
-	public static String Path = "/home/hsh/";
+	public static String RootPath = "/home/hsh/anomaly_predict";
 	
 	private String DataCategory;
 	
-	public DataService(String dc, String dateStr){	
-		DataCategory = Path.concat(dc); 
+	public DataService(String dc){	
+		DataCategory = Paths.get(RootPath, dc).toString(); 
+		
+//		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//		Properties properties = new Properties();
+//		try {
+//			properties.load(classLoader.getResourceAsStream("/parameter.properties"));'
+		
 	}
 	
 	/**
@@ -30,43 +27,55 @@ public class DataService {
 	 * @return
 	 * {id:name}
 	 */
-	public HashMap<String, String> LoadItems() {
-		HashMap<String, String> items = new HashMap();
-		
+	public List<String[]> LoadItems() {
+		List<String[]> items = new ArrayList<String[]>();
+		try { 
+	        FileInputStream fis = new FileInputStream(Paths.get(DataCategory, "list.txt").toString()); 
+	        InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
+	        @SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(isr); 
+	        String line = null;
+            
+	        while ((line = br.readLine()) != null) {
+	        	String[] tokens = line.split(",");
+	        	items.add(tokens);
+            }
+	    } catch (Exception e) { 
+	        e.printStackTrace(); 
+	    }
 		return items;
 	}
 	
-	public SeriesItem LoadFile(String fileName) {
+	public SeriesItem[] LoadData(String fileName) {
 		SeriesItem item = new SeriesItem();
 		item.name = fileName;
 		List<List<Float>> data = new ArrayList<>();
 		
 		try { 
-	        FileInputStream fis = new FileInputStream(fileName); 
+	        FileInputStream fis = new FileInputStream(Paths.get(DataCategory, fileName).toString()); 
 	        InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
-	        BufferedReader br = new BufferedReader(isr); 
+	        @SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(isr); 
 	        String line = null;
             
 	        while ((line = br.readLine()) != null) {
-	        	// Filter the first line
 	        	if (line.startsWith("Server") || line.trim().isEmpty())
 	        		continue;
 	        	String[] tokens = line.split(",");
 	        	
-//	        	if (tokens[2].startsWith(" "))
-//	        		continue;
-//	        	System.out.println(tokens[2]);
-	        	
-	        	float date = new SimpleDateFormat(  
-	                     "yyyy/MM/dd HH:mm:ss").parse(tokens[3]).getTime();
+//	        	float date = new SimpleDateFormat(  
+//	                     "yyyy/MM/dd HH:mm:ss").parse(tokens[3]).getTime();
+
+	        	float date = Float.parseFloat(tokens[0]);
 	        	
 	        	try {
-	        		float value = Float.parseFloat(tokens[2]);
+	        		float value = Float.parseFloat(tokens[1]);
 		        	List<Float> fItem = new ArrayList<>();
 		        	fItem.add(date);
 		        	fItem.add(value);
 		        	
 		        	data.add(fItem);
+		        	
 				} catch (Exception e) {
 				}
 	        	
@@ -77,7 +86,8 @@ public class DataService {
 	    } catch (Exception e) { 
 	        e.printStackTrace(); 
 	    }
-		return item;
+		SeriesItem[] items = new SeriesItem[]{item};
+		return items;
 	}
 	
 	public class SeriesItem{

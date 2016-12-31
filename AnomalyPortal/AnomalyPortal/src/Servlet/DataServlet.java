@@ -28,27 +28,17 @@ public class DataServlet extends BaseServlet{
 			HttpServletResponse response) throws  IOException {
 		String kind = request.getParameter("kind");
 		String dc = request.getParameter("dc");
-		String file = request.getParameter("file");
-		String date = request.getParameter("date");
+		
+		Gson gson = new Gson();
+		response.setHeader("content-type","text/html;charset=UTF-8");
+		DataService dataService = new DataService(dc);
 		
 		if (kind.equals("list")){
-			
+			response.getWriter().write(gson.toJson(dataService.LoadItems()));
 		}
 		else if (kind.equals("data")) {
-			
-		}
-		if (file != null)
-		{
-			DataService dataService;
-			try {
-				dataService = new DataService(file, date);
-				Gson gson = new Gson();
-				response.setHeader("content-type","text/html;charset=UTF-8");
-				response.getWriter().write(gson.toJson(dataService.series));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			
+			String fileId = request.getParameter("fid");
+			response.getWriter().write(gson.toJson(dataService.LoadData(fileId)));
 		}
 	}
 }

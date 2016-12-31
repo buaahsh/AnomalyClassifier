@@ -5,6 +5,7 @@
 
 $(function(){
 	//init();
+	select_cat();
 	select();
 })
 
@@ -15,11 +16,24 @@ function init() {
 	});
 }
 
+function select_cat(){
+	$('#select_cat').change(function(){
+		var p1=$(this).children('option:selected').val();
+		$.getJSON("/AnomalyPortal/Data?kind=list&dc=" + p1, function(data){
+			$.each(data, function(idx, item){
+				$('#select').append("<option value='" 
+						+ item[1] +  "'> " + item[0] + "</option>");
+			})
+			
+		});
+	});
+}
+
 function select(){
 	$('#select').change(function(){
 		var p1=$(this).children('option:selected').val();
-		var arg = 'test1';
-		$.getJSON("/AnomalyPortal/Data?file=" + arg + "&date=" + p1, function(data){
+		var dc = $('#select_cat').children('option:selected').val();
+		$.getJSON("/AnomalyPortal/Data?kind=data&dc=" + dc + "&fid=" + p1, function(data){
 			plot(data);
 		});
 	});
@@ -39,11 +53,11 @@ function plot(series) {
 //            text: 'Irregular time data in Highcharts JS'
 //        },
         xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
-            },
+//            type: 'datetime',
+//            dateTimeLabelFormats: { // don't display the dummy year
+//                month: '%e. %b',
+//                year: '%b'
+//            },
             title: {
                 text: 'Date'
             }
@@ -52,7 +66,6 @@ function plot(series) {
 //            title: {
 //                text: 'Snow depth (m)'
 //            },
-            min: -50
         },
 //        tooltip: {
 //            headerFormat: '<b>{series.name}</b><br>',

@@ -39,16 +39,24 @@
     
     <div class="container">
       <div class="row" id='table2_div'>
-      <h2>DBSCAN</h2>
+      <h2>Improved Density-Based Spatial Clustering of Applications with Noise(IDBSCAN)</h2>
         <span style="
             float: left;
             margin-top: 8px;
-        ">日期选择：</span>
-        <select style="width:200px" class="form-control" id="select">
-          <option>2015/6</option>
-          <option>2015/7</option>
+        ">数据集：</span>
+        <select style="width:200px" class="form-control" id="select_cat">
+          <option value='y'>Yahoo Lab</option>
+          <option value='t'>Tencent</option>
         </select>
       
+      	
+      	<span style="
+            float: left;
+            margin-top: 8px;
+        ">数据维度：</span>
+        <select style="width:200px" class="form-control" id="select">
+        </select>
+        
         <div id='plot'>
             <div id='container'></div>
             <div id='container2'></div>
