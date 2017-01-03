@@ -46,7 +46,7 @@ public class DataService {
 		return items;
 	}
 	
-	public SeriesItem[] LoadData(String fileName) {
+	public SeriesItem LoadData(String fileName) {
 		SeriesItem item = new SeriesItem();
 		item.name = fileName;
 		List<List<Float>> data = new ArrayList<>();
@@ -86,8 +86,8 @@ public class DataService {
 	    } catch (Exception e) { 
 	        e.printStackTrace(); 
 	    }
-		SeriesItem[] items = new SeriesItem[]{item};
-		return items;
+//		SeriesItem[] items = new SeriesItem[]{item};
+		return item;
 	}
 	
 	public class SeriesItem{
