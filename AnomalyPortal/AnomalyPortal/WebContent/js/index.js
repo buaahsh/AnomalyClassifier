@@ -24,6 +24,7 @@ function init() {
 
 function select_cat(){
 	$('#select_cat').change(function(){
+		$('#select').empty();
 		var p1=$(this).children('option:selected').val();
 		$.getJSON("/AnomalyPortal/Data?kind=list&dc=" + p1, function(data){
 			$.each(data, function(idx, item){
@@ -48,24 +49,30 @@ function select(){
 function plotNew(series) {
 	$('#container').empty();
 	
-	var data = series.data;
+	var data = series.points;
     var detailChart;
     // create the detail chart
     function createDetail(masterChart) {
 
         // prepare the detail chart
         var detailData = [],
-            detailStart = data[0][0];
+            detailStart = data[0].x;
 
         $.each(masterChart.series[0].data, function () {
             if (this.x >= detailStart) {
-                detailData.push(this.y);
+            	if (this.description.indexOf('1') == 0){
+            		detailData.push({'y':this.y, 'color': '#FF3030', 'description': this.description});
+            	}
+            	else{
+            		detailData.push({'y':this.y, 'description': this.description});
+            	}
             }
         });
 
         // create a detail chart referenced by a global variable
         detailChart = Highcharts.chart('detail-container', {
             chart: {
+            	type: 'scatter',
                 marginBottom: 120,
                 reflow: false,
                 marginLeft: 50,
@@ -78,7 +85,7 @@ function plotNew(series) {
                 enabled: false
             },
             title: {
-                text: 'Historical USD to EUR Exchange Rate'
+                text: 'IDBSCAN Results'
             },
             xAxis: {
 //                type: 'datetime'
@@ -88,39 +95,60 @@ function plotNew(series) {
                     text: null
                 },
             },
+//            tooltip: {
+//                formatter: function () {
+//                    var point = this.points[0];
+//                    return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
+//                        '1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
+//                },
+//                shared: true
+//            },
             tooltip: {
-                formatter: function () {
-                    var point = this.points[0];
-                    return '<b>' + point.series.name + '</b><br/>' + Highcharts.dateFormat('%A %B %e %Y', this.x) + ':<br/>' +
-                        '1 USD = ' + Highcharts.numberFormat(point.y, 2) + ' EUR';
-                },
-                shared: true
+//                headerFormat: 
+//                	function(){
+//////                	var point = this.points[0];
+//////                	d = point.description;
+////                	var text = 'Normal'
+//////                	if (d.indexOf('1') == 0){
+//////                		text = 'Anomaly';
+////                	}
+//                	return '<b>' + text + '</b><br>';
+//                	},
+                pointFormatter: 
+                	function(){
+	                	var d = this.description;
+	//                	var text = 'Normal'
+	                	if (d.indexOf('1') == 0){
+	                		return d;
+	                	}
+	                	else
+	                		return 'Normal';
+                	}
+                
             },
             legend: {
                 enabled: false
             },
             plotOptions: {
-                series: {
+            	scatter: {
+            		lineWidth:1,
+            		dashStyle:'ShortDash',
                     marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 3
-                            }
-                        }
+                        radius:2
                     }
+                },
+                series: {
+                	turboThreshold:600000
                 }
             },
             series: [{
-                name: 'USD to EUR',
+                name: 'Analysis',
                 pointStart: detailStart,
-                pointInterval: 24 * 3600 * 1000,
                 data: detailData
             }],
 
             exporting: {
-                enabled: false
+                enabled: true
             }
 
         }); // return chart
@@ -150,7 +178,12 @@ function plotNew(series) {
                         // reverse engineer the last part of the data
                         $.each(this.series[0].data, function () {
                             if (this.x > min && this.x < max) {
-                                detailData.push([this.x, this.y]);
+                            	if (this.description.indexOf('1') == 0){
+                            		detailData.push({'x': this.x, 'y':this.y, 'color': '#FF3030', 'description': this.description});
+                            	}
+                            	else{
+                            		detailData.push({'x': this.x, 'y':this.y, 'description': this.description});
+                            	}
                             }
                         });
 
@@ -158,7 +191,7 @@ function plotNew(series) {
                         xAxis.removePlotBand('mask-before');
                         xAxis.addPlotBand({
                             id: 'mask-before',
-                            from: data[0][0],
+                            from: data[0].x,
                             to: min,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
@@ -167,7 +200,7 @@ function plotNew(series) {
                         xAxis.addPlotBand({
                             id: 'mask-after',
                             from: max,
-                            to: data[data.length - 1][0],
+                            to: data[data.length - 1].x,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
 
@@ -186,8 +219,8 @@ function plotNew(series) {
 //                maxZoom: 14 * 24 * 3600000, // fourteen days
                 plotBands: [{
                     id: 'mask-before',
-                    from: data[0][0],
-                    to: data[data.length - 1][0],
+                    from: data[0].x,
+                    to: data[data.length - 1].x,
                     color: 'rgba(0, 0, 0, 0.2)'
                 }],
                 title: {
@@ -218,6 +251,7 @@ function plotNew(series) {
             },
             plotOptions: {
                 series: {
+                	turboThreshold:600000,
                     fillColor: {
                         linearGradient: [0, 0, 0, 70],
                         stops: [
@@ -243,7 +277,7 @@ function plotNew(series) {
                 type: 'area',
                 name: series.name,
                 pointInterval: 24 * 3600 * 1000,
-                pointStart: data[0][0],
+                pointStart: data[0].x,
                 data: data
             }],
 
@@ -275,50 +309,4 @@ function plotNew(series) {
     // create master and in its callback, create the detail chart
     createMaster();
     
-}
-
-function plot(series) {
-	var chart = $('#container').highcharts({
-		chart: {
-//            type: 'spline'
-			type: 'scatter',
-			zoomType: 'x'
-		},
-        title: {
-            text: '井口环空压力数据分析'
-        },
-//        subtitle: {
-//            text: 'Irregular time data in Highcharts JS'
-//        },
-        xAxis: {
-//            type: 'datetime',
-//            dateTimeLabelFormats: { // don't display the dummy year
-//                month: '%e. %b',
-//                year: '%b'
-//            },
-            title: {
-                text: 'Date'
-            }
-        },
-        yAxis: {
-//            title: {
-//                text: 'Snow depth (m)'
-//            },
-        },
-//        tooltip: {
-//            headerFormat: '<b>{series.name}</b><br>',
-//            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-//        },
-
-        plotOptions: {
-            spline: {
-                marker: {
-                    enabled: true
-                }
-            }
-        },
-
-        series: series
-    })
-    .highcharts(); // return chart
 }

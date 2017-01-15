@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Model.PointItem;
+import Model.SeriesItem;
+
 public class DataService {
 	public static String RootPath = "/home/hsh/anomaly_predict";
 	
@@ -14,16 +17,10 @@ public class DataService {
 	
 	public DataService(String dc){	
 		DataCategory = Paths.get(RootPath, dc).toString(); 
-		
-//		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-//		Properties properties = new Properties();
-//		try {
-//			properties.load(classLoader.getResourceAsStream("/parameter.properties"));'
-		
 	}
 	
 	/**
-	 * 返回该数据类别下面的数据项，
+	 * 返回该数据类别下面的数据项
 	 * @return
 	 * {id:name}
 	 */
@@ -46,9 +43,15 @@ public class DataService {
 		return items;
 	}
 	
+	/**
+	 * 加载数据
+	 * @param fileName
+	 * @return
+	 */
 	public SeriesItem LoadData(String fileName) {
 		SeriesItem item = new SeriesItem();
 		item.name = fileName;
+		List<PointItem> points = new ArrayList<>();
 		List<List<Float>> data = new ArrayList<>();
 		
 		try { 
@@ -70,17 +73,28 @@ public class DataService {
 	        	
 	        	try {
 	        		float value = Float.parseFloat(tokens[1]);
-		        	List<Float> fItem = new ArrayList<>();
-		        	fItem.add(date);
-		        	fItem.add(value);
+	        		PointItem fItem = new PointItem();
+	        		fItem.x = date;
+	        		fItem.y = value;
 		        	
-		        	data.add(fItem);
-		        	
+	        		float label = Float.parseFloat(tokens[2]);
+	        		if (label > 0){
+	        			String color = "rgb(247, 163, 92)";
+	        			fItem.description = "1";
+	        		}
+	        		else {
+	        			fItem.description = "0";
+					}
+	        		points.add(fItem);
+	        		List<Float> dataItem = new ArrayList<>();
+	        		dataItem.add(date);
+	        		dataItem.add(value);
+		        	data.add(dataItem);
 				} catch (Exception e) {
 				}
 	        	
             }
-	        
+	        item.points = points;
 	        item.data = data;
 	        
 	    } catch (Exception e) { 
@@ -88,10 +102,5 @@ public class DataService {
 	    }
 //		SeriesItem[] items = new SeriesItem[]{item};
 		return item;
-	}
-	
-	public class SeriesItem{
-		public String name;
-		public List<List<Float>> data;
 	}
 }
