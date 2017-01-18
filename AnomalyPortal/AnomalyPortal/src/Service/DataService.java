@@ -11,7 +11,7 @@ import Model.PointItem;
 import Model.SeriesItem;
 
 public class DataService {
-	public static String RootPath = "/home/hsh/anomaly_predict";
+	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
 	
 	private String DataCategory;
 	
@@ -79,8 +79,8 @@ public class DataService {
 		        	
 	        		float label = Float.parseFloat(tokens[2]);
 	        		if (label > 0){
-	        			String color = "rgb(247, 163, 92)";
-	        			fItem.description = "1";
+//	        			String color = "rgb(247, 163, 92)";
+	        			fItem.description = "1," + label;
 	        		}
 	        		else {
 	        			fItem.description = "0";

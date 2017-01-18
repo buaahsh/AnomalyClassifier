@@ -61,7 +61,7 @@ function plotNew(series) {
         $.each(masterChart.series[0].data, function () {
             if (this.x >= detailStart) {
             	if (this.description.indexOf('1') == 0){
-            		detailData.push({'y':this.y, 'color': '#FF3030', 'description': this.description});
+            		detailData.push({'y':this.y, 'color': 'rgb(247, 163, 92)', 'description': this.description});
             	}
             	else{
             		detailData.push({'y':this.y, 'description': this.description});
@@ -179,7 +179,7 @@ function plotNew(series) {
                         $.each(this.series[0].data, function () {
                             if (this.x > min && this.x < max) {
                             	if (this.description.indexOf('1') == 0){
-                            		detailData.push({'x': this.x, 'y':this.y, 'color': '#FF3030', 'description': this.description});
+                            		detailData.push({'x': this.x, 'y':this.y, 'color': 'rgb(247, 163, 92)', 'description': this.description});
                             	}
                             	else{
                             		detailData.push({'x': this.x, 'y':this.y, 'description': this.description});
