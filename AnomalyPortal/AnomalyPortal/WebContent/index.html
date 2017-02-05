@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>异常预测</title>
+    <title>Anomaly Prediction</title>
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -21,24 +21,24 @@
   <body youdao="bind">
 
     <nav class="navbar navbar-static-top navbar-dark bg-inverse">
-      <a class="navbar-brand" href="#">异常预测</a>
+      <a class="navbar-brand" href="#">Anomaly Prediction</a>
       <ul class="nav navbar-nav">
         <li class="nav-item active">
-          <a class="nav-link" href="/AnomalyPortal/">首页 <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/AnomalyPortal/">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/AnomalyPortal/single.html">单维度预测</a>
+          <a class="nav-link" href="/AnomalyPortal/single.html">Single Dimension</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/AnomalyPortal/multi.html">多维度预测</a>
+          <a class="nav-link" href="/AnomalyPortal/multi.html">Multi Dimension</a>
         </li>
       </ul>
     </nav>
     
     <div class="jumbotron">
       <div class="container">
-        <p>
-        	针对多租户应用的监控环境，进行单维度和多维度的异常预测与分析
+        <p style="font-size: 24px;">
+        Single-dimension and Multi-dimension Anomaly Prediction and Analysis Toward Multi-tenancy Applications Monitoring Systems 
         </p>
       </div>
     </div>
@@ -47,23 +47,27 @@
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
-          <h2>单维度异常预测</h2>
-          	<p>采用无监督聚类算法，自动发现和预测单维度上的异常情况。
-          	通过保留核心点的机制将聚类模型转化为分类模型，提高了异常预测的速度完成模型的实时更新，通过去冗余的方式减少了核心点数量，缩小了模型的规模.
-        	</p>
+          <h2>Single-dimension Anomaly Prediction</h2>
+          	<p>
+          	The unsupervised clustering algorithm is proposed to the single-dimension anomaly prediction model,
+          	 and then optimize the efficiency and pruning based on the original algorithm.
+          	  The single-dimension anomaly prediction model automatically detects and predicts anomalies without manual annotation.
+          	</p>
           <p><a class="btn btn-secondary" href="/AnomalyPortal/single.html" role="button">View details »</a></p>
         </div>
         <div class="col-md-4">
-          <h2>多维度异常预测</h2>
+          <h2>Multi-dimension Anomaly Prediction</h2>
           	<p>
-          	基于循环神经网络的上下文相关和周期相关的异常预测模型，不需要人为设计特征，可以直接利用监控数据进行训练。
+          	Context-aware anomaly prediction model and cycle-aware anomaly prediction model for multi-dimensional monitoring tasks. 
 			</p>
           <p><a class="btn btn-secondary" href="/AnomalyPortal/multi.html" role="button">View details »</a></p>
        </div>
         <div class="col-md-4">
-          <h2>异常分析</h2>
-          <p></p>
-          <!-- <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p> -->
+          <h2>Anomaly Analysis</h2>
+          <p>
+          Anomaly analysis model uses K-Nearest Neighbor and density function estimation model to analyze abnormal severity on unlabeled data.
+          </p>
+          
         </div>
       </div>
       
