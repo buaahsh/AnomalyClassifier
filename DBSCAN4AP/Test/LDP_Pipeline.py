@@ -27,7 +27,7 @@ def handle_one_file(file_name, f_out, windows_width):
     with open(root + file_name.split('/')[-1] + '.out', 'w') as f_out:
         i = 1
         for v, l in zip(dataset['value'][windows_width-1:], labels):
-            print >>f_out, '{0},{1},{2}'.format(i, v, l)
+            # print f_out, '{0},{1},{2}'.format(i, v, l)
             i += 1
 
 
@@ -56,7 +56,7 @@ def para_pipeline():
                 for i in range(0, 15):
                     handle_one_file(file_name, f_out, i)
             except:
-                print file_name, "Error!!!!!!!"
+                print(file_name, "Error!!!!!!!")
 
 if __name__ == "__main__":
     pipeline()

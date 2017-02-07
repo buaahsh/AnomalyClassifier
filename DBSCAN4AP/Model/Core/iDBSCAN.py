@@ -93,7 +93,7 @@ class iDBSCAN(DBSCAN):
                         self.cache_components_[self.num_cache_ % self.cache_components_.shape[0]] = x
                         self.num_cache_ += 1
             else:
-                labels.append(-1)
+                labels.append(1)
 
         return labels
 
@@ -117,7 +117,7 @@ class iDBSCAN(DBSCAN):
         dists = dist.pairwise(X, self.new_components_[:self.num_components_])
         # print dists
         for d, x in zip(dists, X):
-            num_neighbors = len(filter(lambda t: t <= self.eps, d))
+            num_neighbors = len(list(filter(lambda t: t <= self.eps, d)))
             if num_neighbors:
                 labels.append(0)
                 if self.min_samples <= num_neighbors <= r * self.min_samples and self.num_components_ < self.new_components_.shape[0]:
@@ -128,7 +128,7 @@ class iDBSCAN(DBSCAN):
                     num_cache = 0
                     if idx:
                         cache_dists = dist.pairwise([x], self.cache_components_[:])
-                        num_cache = len(filter(lambda t: t <= self.eps, cache_dists[0]))
+                        num_cache = len(list(filter(lambda t: t <= self.eps, cache_dists[0])))
                     if self.min_samples <= num_neighbors + num_cache <= r * self.min_samples and self.num_components_ < self.new_components_.shape[0]:
                         self.new_components_[self.num_components_] = x
                         self.num_components_ += 1
