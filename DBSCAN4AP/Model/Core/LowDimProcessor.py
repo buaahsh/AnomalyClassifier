@@ -11,12 +11,10 @@ DBSCAN: Density-Based Spatial Clustering of Applications with Noise
 # License: BSD 3 clause
 
 
+from sklearn.grid_search import ParameterGrid
 from sklearn.preprocessing import StandardScaler
 
-from Model.ADDBSCAN import ADDBSCAN
-
-# from sklearn.grid_search import GridSearchCV
-from sklearn.grid_search import ParameterGrid
+from Model.Core.iDBSCAN import iDBSCAN
 
 
 class LowDimProcessor(object):
@@ -51,7 +49,7 @@ class LowDimProcessor(object):
         best_err_score = None
 
         for parameter in parameters:
-            m = ADDBSCAN()
+            m = iDBSCAN()
             m.set_params(**parameter)
             m.fit(X)
             labels = m.labels_
@@ -95,11 +93,11 @@ class LowDimProcessor(object):
 
         if op:
             parameters = self.parameterOptimization(standard_X, estimationPer)
-            self.model = ADDBSCAN()
+            self.model = iDBSCAN()
             self.model.set_params(**parameters)
         else:
             assert(eps and min_samples)
-            self.model = ADDBSCAN(eps, min_samples)
+            self.model = iDBSCAN(eps, min_samples)
 
         # extract the features from standard X
         standard_X = self.featureExtract(standard_X)

@@ -1,13 +1,12 @@
-import numpy as np
-# import matplotlib.pyplot as plt
-from sklearn import svm
-# import sklearn.ensemble
-import pandas as pd
 import os
+
+import numpy as np
+import pandas as pd
+from sklearn import svm
 
 
 def handle_one_file(file_name, f_out, windows_width):
-    from Model import LowDimProcessor
+    from Model.Core import LowDimProcessor
 
     rng = np.random.RandomState(42)
     dataset = pd.read_csv(file_name)

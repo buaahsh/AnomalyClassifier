@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ADDBSCAN: Advance DBSCAN
+iDBSCAN: improved DBSCAN
 DBSCAN: Density-Based Spatial Clustering of Applications with Noise
 
 Add Prediction method, it can use the old model to predict new data and update the model
@@ -18,9 +18,9 @@ from sklearn.utils import check_array
 from sklearn.neighbors import DistanceMetric
 
 
-class ADDBSCAN(DBSCAN):
+class iDBSCAN(DBSCAN):
     def __init__(self, eps=0.5, min_samples=5, metric='euclidean',
-                 algorithm='auto', leaf_size=30, p=None, random_state=None):
+                 algorithm='auto', leaf_size=30, p=None):
         DBSCAN.__init__(self, eps=eps, min_samples=min_samples, metric=metric,
                  algorithm=algorithm, leaf_size=leaf_size, p=p)
         self.new_components_ = None
@@ -73,7 +73,8 @@ class ADDBSCAN(DBSCAN):
         dists = dist.pairwise(X, self.new_components_[:self.num_components_])
         # print dists
         for d, x in zip(dists, X):
-            num_neighbors = len(filter(lambda t: t <= self.eps, d))
+            f = list(filter(lambda t: t <= self.eps, d))
+            num_neighbors = len(f)
             if num_neighbors:
                 labels.append(0)
                 if self.min_samples <= num_neighbors <= r * self.min_samples and self.num_components_ < self.new_components_.shape[0]:
@@ -84,7 +85,7 @@ class ADDBSCAN(DBSCAN):
                     num_cache = 0
                     if idx:
                         cache_dists = dist.pairwise([x], self.cache_components_[:])
-                        num_cache = len(filter(lambda t: t <= self.eps, cache_dists[0]))
+                        num_cache = len(list(filter(lambda t: t <= self.eps, cache_dists[0])))
                     if self.min_samples <= num_neighbors + num_cache <= r * self.min_samples and self.num_components_ < self.new_components_.shape[0]:
                         self.new_components_[self.num_components_] = x
                         self.num_components_ += 1
@@ -169,7 +170,7 @@ class ADDBSCAN(DBSCAN):
 
 if __name__ == "__main__":
     Y = [[3, 4, 3], [3, 4, 2]]
-    ad = ADDBSCAN()
+    ad = iDBSCAN()
     # ad.min_samples = 2
     # ad.eps = 4
     # ad.components_ = np.array(Y)

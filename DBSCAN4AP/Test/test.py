@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
 
-from Model import ADDBSCAN
+from Model.Core import iDBSCAN
 
 ##############################################################################
 # Generate sample data
@@ -18,7 +18,7 @@ X = StandardScaler().fit_transform(X)
 
 ##############################################################################
 # Compute DBSCAN
-db = ADDBSCAN(eps=0.3, min_samples=5).fit(X)
+db = iDBSCAN(eps=0.3, min_samples=5).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_

@@ -62,7 +62,7 @@ def run(file_path):
                 label = labels[l % 3000]
 
                 dummy_label = 0 if label == maxLabel else -1
-                print >>f_out, '{0},{1},{2},{3}'.format(time, x[0], dummy_label, label)
+                # print >>f_out, '{0},{1},{2},{3}'.format(time, x[0], dummy_label, label)
 
 
 if __name__ == '__main__':

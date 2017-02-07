@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import savefig
 
-from Model import LowDimProcessor
+from Model.Core import LowDimProcessor
 
 
 def get_data(file_name):

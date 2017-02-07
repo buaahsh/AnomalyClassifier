@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 
-from Model.LowDimProcessor import LowDimProcessor
+from Model.Core.LowDimProcessor import LowDimProcessor
 
 
 def handle_one_file(file_name, f_out, windows_width):
