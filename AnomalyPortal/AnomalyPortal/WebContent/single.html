@@ -14,7 +14,11 @@
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
 	<link href="./css/narrow-jumbotron.css" rel="stylesheet">
-
+	<style type="text/css">
+		.col-xs-10{
+			width: auto;
+		}
+	</style>
     <!-- Custom styles for this template -->
   </head>
 
@@ -49,15 +53,48 @@
 	          	<option value='t'>Tencent</option>
 	        </select>
 		  </div>
-		</div>
-		<div class="form-group row">
 		  <label for="example-search-input" class="col-xs-2 col-form-label">Dimension: </label>
 		  <div class="col-xs-10">
 		    <select style="width:200px" class="form-control" id="select">
         	</select>
 		  </div>
 		</div>
-
+		<div class="form-group row">
+		  <label for="example-search-input" class="col-xs-2 col-form-label">Percent for training: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='0.2'>
+		  </div>
+		  <label for="example-search-input" class="col-xs-2 col-form-label">Ratio of anomaly: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='0.2'>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <label for="example-search-input" class="col-xs-2 col-form-label">eps: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='0.2'>
+		  </div>
+		  <label for="example-search-input" class="col-xs-2 col-form-label">minpts: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='5'>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <label for="example-search-input" class="col-xs-2 col-form-label">redundancy: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='10'>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <div class="col-xs-10">
+			<input type="checkbox"> Anomaly Analysis
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <div class="col-xs-10">
+			 <button id="submit" class="btn btn-primary">Submit</button>
+		  </div>
+		</div>
         <div id='plot'>
             <div id='container'></div>
             <div id='container2'></div>
