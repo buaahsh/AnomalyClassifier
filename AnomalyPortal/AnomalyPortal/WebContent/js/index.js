@@ -16,9 +16,9 @@ function init() {
 					+ item[1] +  "'> " + item[0] + "</option>");
 		})
 		var p1 = $($('#select').children()[0]).val();
-		$.getJSON("/AnomalyPortal/Data?kind=data&dc=y&fid=" + p1, function(data){
-			plotNew(data);
-		});
+//		$.getJSON("/AnomalyPortal/Data?kind=data&dc=y&fid=" + p1, function(data){
+//			plotNew(data);
+//		});
 	});
 }
 
@@ -37,10 +37,22 @@ function select_cat(){
 }
 
 function select(){
-	$('#select').change(function(){
-		var p1=$(this).children('option:selected').val();
+	$('#submit').click(function(){
+//	$('#select').change(function(){
+		var p1=$('#select').children('option:selected').val();
 		var dc = $('#select_cat').children('option:selected').val();
-		$.getJSON("/AnomalyPortal/Data?kind=data&dc=" + dc + "&fid=" + p1, function(data){
+		var p = $('#p').val();
+		var ratio = $('#ratio').val();
+		var eps = $('#eps').val();
+		var minpts = $('#minpts').val();
+		var r = $('#r').val();
+		$.getJSON("/AnomalyPortal/Data?kind=data&dc=" + dc + "&fid=" + p1
+				+ "&p=" + p
+				+ "&ratio=" + ratio
+				+ "&eps=" + eps
+				+ "&minpts=" + minpts
+				+ "&r=" + r
+				, function(data){
 			plotNew(data);
 		});
 	});

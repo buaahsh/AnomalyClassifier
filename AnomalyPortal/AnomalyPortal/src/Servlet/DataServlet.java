@@ -38,7 +38,12 @@ public class DataServlet extends BaseServlet{
 		}
 		else if (kind.equals("data")) {
 			String fileId = request.getParameter("fid");
-			response.getWriter().write(gson.toJson(dataService.LoadData(fileId)));
+			String p = request.getParameter("p");
+			String ratio = request.getParameter("ratio");
+			String eps = request.getParameter("eps");
+			String minpts = request.getParameter("minpts");
+			String r = request.getParameter("r");
+			response.getWriter().write(gson.toJson(dataService.LoadData(fileId, p, ratio, eps, minpts, r)));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package Service;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
@@ -11,9 +12,10 @@ import Model.PointItem;
 import Model.SeriesItem;
 
 public class DataService {
-	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
-//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";
+//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
 	
+	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
 	private String DataCategory;
 	
 	public DataService(String dc){	
@@ -93,7 +95,6 @@ public class DataService {
 		        	data.add(dataItem);
 				} catch (Exception e) {
 				}
-	        	
             }
 	        item.points = points;
 	        item.data = data;
@@ -103,5 +104,48 @@ public class DataService {
 	    }
 //		SeriesItem[] items = new SeriesItem[]{item};
 		return item;
+	}
+	
+	/**
+	 * 加参数的加载数据，首先运行python程序跑出结果
+	 * @param fileName
+	 * @param pamameter
+	 * @return
+	 */
+	public SeriesItem LoadData(String fileName, String p, String ratio, String eps, String minpts, String r) {
+		String outputFile = Paths.get(DataCategory, fileName + ".result").toString();
+		String inputFile = Paths.get(DataCategory, fileName).toString();
+		
+		File input_file = new File(inputFile);
+		
+		if (! input_file.exists()){
+			return null;
+		}
+		
+		String command = String.format("python %s\\command.py --input %s --output %s --per %s --ratio %s --eps %s --minpt %s --r %s", 
+				PythonPath, inputFile, outputFile, p, ratio, eps, minpts, r);
+		
+		System.out.println(command);
+		RuntimeService.RunCommand(command);
+		
+		while (true) {
+			File file = new File(outputFile);
+			
+			if (file.exists()){
+				try {
+					Thread.sleep(1000);
+					break;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return LoadData(fileName + ".result");
 	}
 }

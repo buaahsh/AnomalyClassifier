@@ -6,36 +6,35 @@ train and predict the anomalies by command
 # Author: Shaohan Huang <buaahsh@gmail.com>
 # Date: 2016-8-18
 # License: BSD 3 clause
-
 import numpy as np
 import pandas as pd
 import argparse
 
-from Model.Core.LowDimProcessor import LowDimProcessor
+from Core.LowDimProcessor import LowDimProcessor
 
 
 def train(args):
     input_file = args.input
     output_file = args.output
-    dataset = pd.read_csv(input_file)
+    dataset = pd.read_csv(input_file, header=None)
     windows_width = args.width
     ldp = LowDimProcessor(windows_width=windows_width)
     train_per = args.per
-    train_data = dataset['value'][:int(len(dataset['value']) * train_per)]
+    train_data = dataset[1][:int(len(dataset[1]) * train_per)]
     if args.ratio > 0:
         ldp.train(train_data, op=False, estimationPer=args.ratio)
     else:
         ldp.train(train_data, min_samples=args.minpts, eps=args.eps)
 
     if args.a:
-        labels = ldp.predict_with_analysis(dataset['value'])
-        dataset['label'] = 0
-        dataset['label'][windows_width - 1:] = labels
+        labels = ldp.predict_with_analysis(dataset[1])
+        dataset[2] = 0
+        dataset[2][windows_width - 1:] = labels
     else:
-        labels = ldp.predict(dataset['value'])
-        dataset['label'] = 0
-        dataset['label'][windows_width - 1:] = labels
-    dataset.to_csv(output_file)
+        labels = ldp.predict(dataset[1])
+        dataset[2] = 0
+        dataset[2][windows_width - 1:] = labels
+    dataset.to_csv(output_file, index=None, header=None)
 
 
 def main():
