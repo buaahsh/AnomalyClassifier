@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-train and predict the anomalies by command
+train the anomalies prediction model by command
 """
 
 # Author: Shaohan Huang <buaahsh@gmail.com>
 # Date: 2016-8-18
 # License: BSD 3 clause
 
-import numpy as np
+import pickle
 import pandas as pd
 import argparse
 
@@ -26,16 +26,8 @@ def train(args):
         ldp.train(train_data, op=False, estimationPer=args.ratio)
     else:
         ldp.train(train_data, min_samples=args.minpts, eps=args.eps)
-
-    if args.a:
-        labels = ldp.predict_with_analysis(dataset['value'])
-        dataset['label'] = 0
-        dataset['label'][windows_width - 1:] = labels
-    else:
-        labels = ldp.predict(dataset['value'])
-        dataset['label'] = 0
-        dataset['label'][windows_width - 1:] = labels
-    dataset.to_csv(output_file)
+    with open(output_file, 'wb') as handle:
+        pickle.dump(ldp, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def main():
