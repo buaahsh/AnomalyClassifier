@@ -12,10 +12,11 @@ import Model.PointItem;
 import Model.SeriesItem;
 
 public class DataService {
-//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model/Command";
 	
-	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
-	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
+//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+//	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
 	private String DataCategory;
 	
 	public DataService(String dc){	

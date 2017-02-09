@@ -49,7 +49,7 @@ def main():
                         help='width of widow sampling')
     parser.add_argument('--ratio', type=int, default=0,
                         help='ratio of anomaly')
-    parser.add_argument('--eps', type=int, default=0.2,
+    parser.add_argument('--eps', type=float, default=0.2,
                         help='eps for model')
     parser.add_argument('--minpts', type=int, default=10,
                         help='mipts for model')
