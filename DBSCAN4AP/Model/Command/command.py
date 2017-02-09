@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import argparse
 
-from Core.LowDimProcessor import LowDimProcessor
+from Core.LDP import LDP
 
 
 def train(args):
@@ -18,7 +18,7 @@ def train(args):
     output_file = args.output
     dataset = pd.read_csv(input_file, header=None)
     windows_width = args.width
-    ldp = LowDimProcessor(windows_width=windows_width)
+    ldp = LDP(windows_width=windows_width)
     train_per = args.per
     train_data = dataset[1][:int(len(dataset[1]) * train_per)]
     if args.ratio > 0:
@@ -26,14 +26,19 @@ def train(args):
     else:
         ldp.train(train_data, min_samples=args.minpts, eps=args.eps)
 
+    r = args.r
     if args.a:
-        labels = ldp.predict_with_analysis(dataset[1])
+        labels = ldp.predict_with_analysis(dataset[1], r)
         dataset[2] = 0
         dataset[2][windows_width - 1:] = labels
     else:
-        labels = ldp.predict(dataset[1])
+        labels = ldp.predict(dataset[1], r)
         dataset[2] = 0
         dataset[2][windows_width - 1:] = labels
+
+    labels = ldp.count_core_points(dataset[1], r)
+    dataset[3] = labels[0]
+    dataset[3][windows_width - 1:] = labels
     dataset.to_csv(output_file, index=None, header=None)
 
 
@@ -47,7 +52,7 @@ def main():
                         help='percent for training')
     parser.add_argument('--width', type=int, default=3,
                         help='width of widow sampling')
-    parser.add_argument('--ratio', type=int, default=0,
+    parser.add_argument('--ratio', type=float, default=0,
                         help='ratio of anomaly')
     parser.add_argument('--eps', type=float, default=0.2,
                         help='eps for model')

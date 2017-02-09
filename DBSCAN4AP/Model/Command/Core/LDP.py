@@ -17,14 +17,14 @@ from sklearn.preprocessing import StandardScaler
 from Core.iDBSCAN import iDBSCAN
 
 
-class LowDimProcessor(object):
+class LDP(object):
 
     def __init__(self, windows_width=5):
         self.model = None
         self.scaler = None
         self.windows_width = windows_width
 
-    def parameterOptimization(self, X, estimation_per):
+    def parameter_optimization(self, X, estimation_per):
         """
         MinPts must be chosen at least 3. However,
         larger values are usually better for data sets with noise and will yield more significant clusters.
@@ -65,7 +65,7 @@ class LowDimProcessor(object):
         # print best_parameter
         return best_parameter
 
-    def featureExtract(self, X):
+    def feature_extract(self, X):
 
         """
         Extract features, based on windows width
@@ -92,7 +92,7 @@ class LowDimProcessor(object):
         standard_X = self.scaler.transform(X)
 
         if op:
-            parameters = self.parameterOptimization(standard_X, estimationPer)
+            parameters = self.parameter_optimization(standard_X, estimationPer)
             self.model = iDBSCAN()
             self.model.set_params(**parameters)
         else:
@@ -100,7 +100,7 @@ class LowDimProcessor(object):
             self.model = iDBSCAN(eps, min_samples)
 
         # extract the features from standard X
-        standard_X = self.featureExtract(standard_X)
+        standard_X = self.feature_extract(standard_X)
 
         # Train the ad_dbscan model
         self.model.fit(standard_X)
@@ -108,19 +108,26 @@ class LowDimProcessor(object):
         labels = self.model.labels_
         return labels
 
-    def predict(self, X):
+    def predict(self, X, r):
         standard_X = self.scaler.transform(X)
         # extract the features from standard X
-        standard_X = self.featureExtract(standard_X)
-        labels = self.model.detect(standard_X)
+        standard_X = self.feature_extract(standard_X)
+        labels = self.model.detect(standard_X, r)
         return labels
 
-    def predict_with_analysis(self, X):
+    def predict_with_analysis(self, X, r):
         standard_X = self.scaler.transform(X)
         # extract the features from standard X
-        standard_X = self.featureExtract(standard_X)
+        standard_X = self.feature_extract(standard_X)
         # labels = self.model.detect(standard_X)
-        labels = self.model.detect_with_analysis(standard_X)
+        labels = self.model.detect_with_analysis(standard_X, r)
+        return labels
+
+    def count_core_points(self, X, r):
+        standard_X = self.scaler.transform(X)
+        # extract the features from standard X
+        standard_X = self.feature_extract(standard_X)
+        labels = self.model.count_core_points(standard_X, r)
         return labels
 
     def evaluate(self, y1, y2, anomaly_label=1):

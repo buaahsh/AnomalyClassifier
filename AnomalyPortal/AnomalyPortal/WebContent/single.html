@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>异常预测</title>
+    <title>Anomaly Prediction</title>
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -62,17 +62,17 @@
 		<div class="form-group row">
 		  <label for="example-search-input" class="col-xs-2 col-form-label">Percent for training: </label>
 		  <div class="col-xs-10">
-		      <input style="width:200px" class="form-control" id="p" value='0.2'>
+		      <input style="width:200px" class="form-control" id="p" value='0.4'>
 		  </div>
-		  <label for="example-search-input" class="col-xs-2 col-form-label">Ratio of anomaly: </label>
+		 <!-- <label for="example-search-input" class="col-xs-2 col-form-label">Ratio of anomaly: </label>
 		  <div class="col-xs-10">
-		      <input style="width:200px" class="form-control" id="ratio" value='0.2'>
-		  </div>
+		      <input style="width:200px" class="form-control" id="ratio" value='0'>
+		  </div> --> 
 		</div>
 		<div class="form-group row">
 		  <label for="example-search-input" class="col-xs-2 col-form-label">eps: </label>
 		  <div class="col-xs-10">
-		      <input style="width:200px" class="form-control" id="eps" value='0.2'>
+		      <input style="width:200px" class="form-control" id="eps" value='0.3'>
 		  </div>
 		  <label for="example-search-input" class="col-xs-2 col-form-label">minpts: </label>
 		  <div class="col-xs-10">
@@ -96,7 +96,7 @@
 		  </div>
 		</div>
         <div id='plot'>
-            <div id='container'></div>
+            <div id='container' style='height:400px;'></div>
             <div id='container2'></div>
         </div>
       </div>
@@ -104,12 +104,24 @@
       <hr>
 
       <footer>
-        <p>© Company 2016</p>
+        <p>© BUAA-JSI 2016</p>
       </footer>
     </div>
     <!-- /container -->
     
-	
+	<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-hidden="true" style="padding-top:15%; overflow-y:visible;" id="myPleaseWait">
+    <div class=" modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header"><h3 style="margin:0;">Loading...</h3></div>
+            <div class="modal-body">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 	
 	
     <!-- Bootstrap core JavaScript
@@ -124,7 +136,5 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
      <script src="./js/index.js"></script>
-
-
 </body>
 </html>

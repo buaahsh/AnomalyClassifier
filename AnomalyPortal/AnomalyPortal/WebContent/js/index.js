@@ -38,11 +38,13 @@ function select_cat(){
 
 function select(){
 	$('#submit').click(function(){
+		$('#myPleaseWait').modal('show');
 //	$('#select').change(function(){
 		var p1=$('#select').children('option:selected').val();
 		var dc = $('#select_cat').children('option:selected').val();
 		var p = $('#p').val();
-		var ratio = $('#ratio').val();
+//		var ratio = $('#ratio').val();
+		var ratio = 0;
 		var eps = $('#eps').val();
 		var minpts = $('#minpts').val();
 		var r = $('#r').val();
@@ -53,7 +55,9 @@ function select(){
 				+ "&minpts=" + minpts
 				+ "&r=" + r
 				, function(data){
-			plotNew(data);
+			plotNew(data.result);
+			plot(data.core);
+			$('#myPleaseWait').modal('hide');
 		});
 	});
 }
@@ -321,4 +325,27 @@ function plotNew(series) {
     // create master and in its callback, create the detail chart
     createMaster();
     
+}
+
+function plot(series){
+	$('#container2').empty();
+	Highcharts.chart('container2', {
+	    title: {
+	        text: 'Core Points Changes',
+	        x: -20 //center
+	    },
+	    xAxis: {
+	    },
+	    yAxis: {
+	        title: {
+	            text: 'number of core points'
+	        },
+	        plotLines: [{
+	            value: 0,
+	            width: 1,
+	            color: '#808080'
+	        }]
+	    },
+	    series: [series]
+	});
 }

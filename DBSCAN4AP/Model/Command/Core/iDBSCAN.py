@@ -54,7 +54,7 @@ class iDBSCAN(DBSCAN):
         self.new_components_[:self.components_.shape[0]] = self.components_
         self.num_components_ = self.components_.shape[0]
 
-    def detect(self, X):
+    def detect(self, X, r=5):
         """
         it can use the old model to predict new data and update the model
         :param X:
@@ -63,10 +63,10 @@ class iDBSCAN(DBSCAN):
         if not self.new_components_.any():
             self.update_components()
         X = check_array(X, accept_sparse='csr')
-        labels = self.radius_neighbors(X)
+        labels = self.radius_neighbors(X, r)
         return np.array(labels)
 
-    def radius_neighbors(self, X, r=4):
+    def radius_neighbors(self, X, r):
         labels = []
         dist = DistanceMetric.get_metric('euclidean')
         # print self.components_
@@ -97,7 +97,7 @@ class iDBSCAN(DBSCAN):
 
         return labels
 
-    def detect_with_analysis(self, X):
+    def detect_with_analysis(self, X, r=5):
         """
         0: normal
         0-1: abnormal
@@ -107,10 +107,10 @@ class iDBSCAN(DBSCAN):
         if not self.new_components_.any():
             self.update_components()
         X = check_array(X, accept_sparse='csr')
-        labels = self.__radius_neighbors_k_means(X)
+        labels = self.__radius_neighbors_k_means(X, r)
         return np.array(labels)
 
-    def __radius_neighbors_k_means(self, X, r=4):
+    def __radius_neighbors_k_means(self, X, r):
         labels = []
         dist = DistanceMetric.get_metric('euclidean')
         # print self.components_
@@ -138,7 +138,10 @@ class iDBSCAN(DBSCAN):
             else:
                 cache_dists = dist.pairwise([x], self.cache_components_[:])[0]
                 label = self.__analysis(d, cache_dists)
-                labels.append(label)
+                if self.cache_update_judge(x, r):
+                    labels.append(0)
+                else:
+                    labels.append(label)
 
         return labels
 
@@ -167,6 +170,57 @@ class iDBSCAN(DBSCAN):
             return degree + (d_core / d_edge)
         return degree
 
+    def count_core_points(self, X, r):
+        if not self.new_components_.any():
+            self.update_components()
+        X = check_array(X, accept_sparse='csr')
+
+        labels = []
+        dist = DistanceMetric.get_metric('euclidean')
+        # print self.components_
+        dists = dist.pairwise(X, self.new_components_[:self.num_components_])
+        # print dists
+        for d, x in zip(dists, X):
+            f = list(filter(lambda t: t <= self.eps, d))
+            num_neighbors = len(f)
+            if num_neighbors:
+                if self.min_samples <= num_neighbors <= r * self.min_samples and self.num_components_ < \
+                        self.new_components_.shape[0]:
+                    self.new_components_[self.num_components_] = x
+                    self.num_components_ += 1
+                elif 0 < num_neighbors < self.min_samples:
+                    idx = min(self.num_cache_, self.cache_components_.shape[0])
+                    num_cache = 0
+                    if idx:
+                        cache_dists = dist.pairwise([x], self.cache_components_[:])
+                        num_cache = len(list(filter(lambda t: t <= self.eps, cache_dists[0])))
+                    if self.min_samples <= num_neighbors + num_cache <= r * self.min_samples and self.num_components_ < \
+                            self.new_components_.shape[0]:
+                        self.new_components_[self.num_components_] = x
+                        self.num_components_ += 1
+                    else:
+                        self.cache_components_[self.num_cache_ % self.cache_components_.shape[0]] = x
+                        self.num_cache_ += 1
+            labels.append(self.num_components_)
+
+        return np.array(labels)
+
+    def cache_update_judge(self, x, r):
+        dist = DistanceMetric.get_metric('euclidean')
+        idx = min(self.num_cache_, self.cache_components_.shape[0])
+        num_cache = 0
+        if idx:
+            cache_dists = dist.pairwise([x], self.cache_components_[:])
+            num_cache = len(list(filter(lambda t: t <= self.eps, cache_dists[0])))
+        if self.min_samples <= num_cache <= r * self.min_samples and self.num_components_ < \
+                self.new_components_.shape[0]:
+            self.new_components_[self.num_components_] = x
+            self.num_components_ += 1
+            return True
+        else:
+            self.cache_components_[self.num_cache_ % self.cache_components_.shape[0]] = x
+            self.num_cache_ += 1
+            return False
 
 if __name__ == "__main__":
     Y = [[3, 4, 3], [3, 4, 2]]

@@ -9,14 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import Model.PointItem;
+import Model.ResultItem;
 import Model.SeriesItem;
 
 public class DataService {
-	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
-	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model/Command";
+//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+//	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model/Command";
 	
-//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
-//	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
+	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
 	private String DataCategory;
 	
 	public DataService(String dc){	
@@ -107,13 +108,63 @@ public class DataService {
 		return item;
 	}
 	
+	public SeriesItem LoadCore(String fileName) {
+		SeriesItem item = new SeriesItem();
+		SeriesItem item2 = new SeriesItem();
+		item.name = "# core points";
+		item2.name = "# core points without pruning";
+		List<PointItem> points = new ArrayList<>();
+		List<List<Float>> data = new ArrayList<>();
+		
+		try { 
+	        FileInputStream fis = new FileInputStream(Paths.get(DataCategory, fileName).toString()); 
+	        InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
+	        @SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(isr); 
+	        String line = null;
+            
+	        while ((line = br.readLine()) != null) {
+	        	if (line.startsWith("Server") || line.trim().isEmpty())
+	        		continue;
+	        	String[] tokens = line.split(",");
+	        	
+//	        	float date = new SimpleDateFormat(  
+//	                     "yyyy/MM/dd HH:mm:ss").parse(tokens[3]).getTime();
+
+	        	float date = Float.parseFloat(tokens[0]);
+	        	
+	        	try {
+	        		float value = Float.parseFloat(tokens[3]);
+	        		PointItem fItem = new PointItem();
+	        		fItem.x = date;
+	        		fItem.y = value;
+	        		points.add(fItem);
+	        		
+	        		List<Float> dataItem = new ArrayList<>();
+	        		dataItem.add(date);
+	        		dataItem.add(value);
+		        	data.add(dataItem);
+				} catch (Exception e) {
+				}
+            }
+	        item.points = points;
+	        item.data = data;
+	        
+	    } catch (Exception e) { 
+	        e.printStackTrace(); 
+	    }
+		
+//		SeriesItem[] items = new SeriesItem[]{item};
+		return item;
+	}
+	
 	/**
 	 * 加参数的加载数据，首先运行python程序跑出结果
 	 * @param fileName
 	 * @param pamameter
 	 * @return
 	 */
-	public SeriesItem LoadData(String fileName, String p, String ratio, String eps, String minpts, String r) {
+	public ResultItem LoadData(String fileName, String p, String ratio, String eps, String minpts, String r) {
 		String outputFile = Paths.get(DataCategory, fileName + ".result").toString();
 		String inputFile = Paths.get(DataCategory, fileName).toString();
 		
@@ -134,19 +185,24 @@ public class DataService {
 			
 			if (file.exists()){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(5000);
 					break;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		return LoadData(fileName + ".result");
+		ResultItem resultItem = new ResultItem();
+		
+		resultItem.result = LoadData(fileName + ".result");
+		resultItem.core = LoadCore(fileName + ".result");
+		
+		return resultItem;
 	}
 }
