@@ -33,8 +33,8 @@
       <file leaf-file-name="command.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/Command/command.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+            <state relative-caret-position="225">
+              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding>
                 <element signature="e#162#180#0" expanded="true" />
               </folding>
@@ -45,8 +45,8 @@
       <file leaf-file-name="LDP.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/Command/Core/LDP.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1550">
-              <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+            <state relative-caret-position="225">
+              <caret line="123" column="21" lean-forward="true" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
               <folding>
                 <element signature="e#319#364#0" expanded="true" />
               </folding>
@@ -54,27 +54,71 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="evaluation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Model/Command/Core/evaluation.py">
+      <file leaf-file-name="StandardScaler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Model/Command/Core/StandardScaler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="31" />
+            <state relative-caret-position="125">
+              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+              <folding>
+                <element signature="e#203#221#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Evaluation.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Model/Command/Core/Evaluation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="350">
+              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="iDBSCAN.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="iDBSCAN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Model/Command/Core/iDBSCAN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="208" column="0" lean-forward="false" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
+            <state relative-caret-position="125">
+              <caret line="122" column="73" lean-forward="true" selection-start-line="122" selection-start-column="12" selection-end-line="122" selection-end-column="73" />
               <folding>
-                <element signature="e#1956#2291#0" expanded="false" />
-                <element signature="e#2339#3874#0" expanded="false" />
-                <element signature="e#6123#6832#0" expanded="false" />
-                <element signature="e#6881#8575#0" expanded="false" />
+                <element signature="e#287#305#0" expanded="true" />
+                <element signature="e#2068#2403#0" expanded="false" />
+                <element signature="e#2451#3986#0" expanded="false" />
+                <element signature="e#6235#6944#0" expanded="false" />
+                <element signature="e#6993#8687#0" expanded="false" />
+                <element signature="e#8737#9467#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PredictExecutor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Model/Command/Core/PredictExecutor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="113">
+              <caret line="43" column="19" lean-forward="true" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Analysor.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Model/Command/Core/Analysor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Model/Command/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -82,7 +126,7 @@
       <file leaf-file-name="LowDimProcessorTester.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Test/LowDimProcessorTester.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="588">
+            <state relative-caret-position="675">
               <caret line="28" column="19" lean-forward="false" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
               <folding />
             </state>
@@ -97,6 +141,12 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_handle_zeros_in_scale</find>
+      <find>check_array</find>
+    </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -124,10 +174,15 @@
         <option value="$PROJECT_DIR$/Test/LowDimProcessorTester.py" />
         <option value="$PROJECT_DIR$/Model/Command/train.py" />
         <option value="$PROJECT_DIR$/Model/Command/predict.py" />
-        <option value="$PROJECT_DIR$/Model/Command/Core/evaluation.py" />
         <option value="$PROJECT_DIR$/Model/Command/Core/LowDimProcessor.py" />
         <option value="$PROJECT_DIR$/Model/Command/command.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/evaluation.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/LDP.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/predictor.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/StandardScaler.py" />
         <option value="$PROJECT_DIR$/Model/Command/Core/iDBSCAN.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/PredictExecutor.py" />
+        <option value="$PROJECT_DIR$/Model/Command/Core/Analysor.py" />
       </list>
     </option>
   </component>
@@ -153,6 +208,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -249,7 +305,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -535,12 +590,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24791667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985657" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -554,6 +608,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32669324" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985657" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39895698" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -592,8 +647,13 @@
           <line>26</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Model/Command/Core/iDBSCAN.py</url>
+          <line>115</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="30" />
+      <option name="time" value="32" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -606,13 +666,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/unsupervised.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/graph.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/__init__.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/unsupervised.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/graph.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/__init__.py" />
-    <entry file="file:///Library/Python/2.7/site-packages/sklearn/cluster/dbscan_.py" />
     <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/base.py" />
     <entry file="file:///Library/Python/2.7/site-packages/sklearn/base.py" />
     <entry file="file:///Library/Python/2.7/site-packages/sklearn/neighbors/base.py" />
@@ -725,50 +778,121 @@
     <entry file="file://$PROJECT_DIR$/Model/Command/predict.py" />
     <entry file="file://$PROJECT_DIR$/Test/LowDimProcessorTester.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
+        <state relative-caret-position="675">
           <caret line="28" column="19" lean-forward="false" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Model/Command/Core/evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Model/Command/command.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#162#180#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Program Files/Anaconda3/Lib/site-packages/sklearn/metrics/ranking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-112">
+          <caret line="38" column="29" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="107" selection-end-column="15" />
+          <folding>
+            <element signature="e#679#710#0" expanded="false" />
+            <element signature="e#1226#3333#0" expanded="false" />
+            <element signature="e#3451#6070#0" expanded="false" />
+            <element signature="e#6150#8825#0" expanded="false" />
+            <element signature="e#8908#11923#0" expanded="false" />
+            <element signature="e#12042#14963#0" expanded="false" />
+            <element signature="e#15076#19592#0" expanded="false" />
+            <element signature="e#19659#22116#0" expanded="false" />
+            <element signature="e#22180#23941#0" expanded="false" />
+            <element signature="e#24009#27179#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Command/Core/Evaluation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/Anaconda3/Lib/site-packages/sklearn/preprocessing/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="27" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Model/Command/Core/LDP.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1550">
-          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="123" column="21" lean-forward="true" selection-start-line="123" selection-start-column="21" selection-end-line="123" selection-end-column="21" />
           <folding>
             <element signature="e#319#364#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Command/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Command/Core/StandardScaler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding>
+            <element signature="e#203#221#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/-1282051629/sklearn/neighbors/dist_metrics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="161" column="8" lean-forward="false" selection-start-line="161" selection-start-column="8" selection-end-line="161" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Model/Command/Core/iDBSCAN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="208" column="0" lean-forward="false" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
+        <state relative-caret-position="125">
+          <caret line="122" column="73" lean-forward="true" selection-start-line="122" selection-start-column="12" selection-end-line="122" selection-end-column="73" />
           <folding>
-            <element signature="e#1956#2291#0" expanded="false" />
-            <element signature="e#2339#3874#0" expanded="false" />
-            <element signature="e#6123#6832#0" expanded="false" />
-            <element signature="e#6881#8575#0" expanded="false" />
+            <element signature="e#287#305#0" expanded="true" />
+            <element signature="e#2068#2403#0" expanded="false" />
+            <element signature="e#2451#3986#0" expanded="false" />
+            <element signature="e#6235#6944#0" expanded="false" />
+            <element signature="e#6993#8687#0" expanded="false" />
+            <element signature="e#8737#9467#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Command/Core/PredictExecutor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="43" column="19" lean-forward="true" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/Command/Core/Analysor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

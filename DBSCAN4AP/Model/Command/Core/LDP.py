@@ -14,7 +14,7 @@ DBSCAN: Density-Based Spatial Clustering of Applications with Noise
 from sklearn.grid_search import ParameterGrid
 from sklearn.preprocessing import StandardScaler
 
-from Core.iDBSCAN import iDBSCAN
+from .iDBSCAN import iDBSCAN
 
 
 class LDP(object):

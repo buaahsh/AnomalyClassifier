@@ -1,6 +1,8 @@
+import numpy as np
+
+
 def pr(y1, y2, windows_width=0, anomaly_label=1):
     """
-    # TODO : add roc and others
     Evaluate the accuracy
     :param y1: true label
     :param y2: prediction label
@@ -22,3 +24,27 @@ def pr(y1, y2, windows_width=0, anomaly_label=1):
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
     return precision, recall
+
+
+def auc(x, y, reorder=False):
+    if x.shape[0] < 2:
+        raise ValueError('At least 2 points are needed to compute'
+                         ' area under curve, but x.shape = %s' % x.shape)
+
+    direction = 1
+    if reorder:
+        order = np.lexsort((y, x))
+        x, y = x[order], y[order]
+    else:
+        dx = np.diff(x)
+        if np.any(dx < 0):
+            if np.all(dx <= 0):
+                direction = -1
+            else:
+                raise ValueError("Reordering is not turned on, and "
+                                 "the x array is not increasing: %s" % x)
+
+    area = direction * np.trapz(y, x)
+    if isinstance(area, np.memmap):
+        area = area.dtype.type(area)
+    return area

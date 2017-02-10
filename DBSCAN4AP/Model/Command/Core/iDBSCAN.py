@@ -17,6 +17,8 @@ from sklearn.cluster import DBSCAN
 from sklearn.utils import check_array
 from sklearn.neighbors import DistanceMetric
 
+from .PredictExecutor import PredictExecutor
+
 
 class iDBSCAN(DBSCAN):
     def __init__(self, eps=0.5, min_samples=5, metric='euclidean',
@@ -28,6 +30,7 @@ class iDBSCAN(DBSCAN):
         self.x_components_ = 5
         self.num_components_ = 0
         self.num_cache_ = 0
+        self.predict_executor = PredictExecutor(min_samples, eps)
 
     def fit_predict(self, X, y=None, sample_weight=None):
         labels = DBSCAN.fit_predict(self, X, y, sample_weight)
