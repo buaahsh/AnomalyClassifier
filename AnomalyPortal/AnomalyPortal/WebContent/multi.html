@@ -15,6 +15,11 @@
     <link href="./css/bootstrap.min.css" rel="stylesheet">
 	<link href="./css/narrow-jumbotron.css" rel="stylesheet">
 
+	<style type="text/css">
+		.col-xs-10{
+			width: auto;
+		}
+	</style>
     <!-- Custom styles for this template -->
   </head>
 
@@ -35,31 +40,60 @@
       </ul>
     </nav>
     
-    <div class="jumbotron">
+<!--      <div class="jumbotron">
       <div class="container">
-        <h1 class="display-3">Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <h3 class="display-3">Anomaly prediction based recurrent neural networks</h3>
+
+         <p>Anomaly prediction based recurrent neural networks</p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>
       </div>
-    </div>
-    
+    </div> -->
+
+	<br>
     <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+      <div class="row" id='table2_div'>
+       <h2>Anomaly prediction based recurrent neural networks</h2>
+      	<br><br><br>
+        <div class="form-group row">
+		  <label for="example-text-input" class="col-xs-2 col-form-label">Dataset: </label>
+		  <div class="col-xs-10">
+		    <select style="width:200px" class="form-control" id="select_cat">
+	          	<option value='r'>RUBiS</option>
+	          	<option value='i'>IBM S</option>
+	          	<option value='te'>Tencent</option>
+	        </select>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <label for="example-search-input" class="col-xs-2 col-form-label">Percent for training: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="p" value='0.4'>
+		  </div>
+		 <!-- <label for="example-search-input" class="col-xs-2 col-form-label">Ratio of anomaly: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="ratio" value='0'>
+		  </div> --> 
+		</div>
+		<div class="form-group row">
+		  <label for="example-search-input" class="col-xs-2 col-form-label">eps: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="eps" value='0.3'>
+		  </div>
+		  <label for="example-search-input" class="col-xs-2 col-form-label">minpts: </label>
+		  <div class="col-xs-10">
+		      <input style="width:200px" class="form-control" id="minpts" value='5'>
+		  </div>
+		</div>
+		
+		<div class="form-group row">
+		  <div class="col-xs-10">
+			 <button id="submit" class="btn btn-primary">Submit</button>
+			 <button id="download" class="btn btn-primary">Download</button>
+		  </div>
+		</div>
+        <div id='plot'>
+            <div id='container' style='height:400px;'></div>
+            <div id='container2'></div>
         </div>
       </div>
 
@@ -69,6 +103,22 @@
         <p>© BUAA-JSI 2016</p>
       </footer>
     </div>
+    <!-- /container -->
+    
+	<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-hidden="true" style="padding-top:15%; overflow-y:visible;" id="myPleaseWait">
+	    <div class=" modal-dialog modal-m">
+	        <div class="modal-content">
+	            <div class="modal-header"><h3 style="margin:0;">Loading...</h3></div>
+	            <div class="modal-body">
+	                <div class="progress progress-striped active" style="margin-bottom:0;">
+	                    <div class="progress-bar" style="width: 100%"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
     <!-- /container -->
 	
     <!-- Bootstrap core JavaScript
@@ -82,7 +132,7 @@
  
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
-     <script src="./js/index.js"></script>
+     <script src="./js/m_index.js"></script>
 
 
 </body>

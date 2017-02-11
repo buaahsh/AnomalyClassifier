@@ -24,6 +24,10 @@ public class DataService {
 		DataCategory = Paths.get(RootPath, dc).toString(); 
 	}
 	
+	public String getDataCategory() {
+		return this.DataCategory;
+	}
+	
 	/**
 	 * 返回该数据类别下面的数据项
 	 * @return
@@ -83,13 +87,20 @@ public class DataService {
 	        		fItem.y = value;
 		        	
 	        		float label = Float.parseFloat(tokens[2]);
+	        		String d = String.format("Monitoring value: <b>%s</b> at %s", 
+	        				value, date);
+	        		
 	        		if (label > 0){
 //	        			String color = "rgb(247, 163, 92)";
-	        			fItem.description = "1," + label;
+//	        			fItem.description = "1," + label + d;
+	        			d = "Anomaly point<br>" + d;
+	        			d = d + "<br>" + "Anomaly degree:<b>" + label + "</b>";
 	        		}
 	        		else {
-	        			fItem.description = "0";
+	        			d = "Normal point<br>" + d;
 					}
+	        		fItem.description = d;
+	        		
 	        		points.add(fItem);
 	        		List<Float> dataItem = new ArrayList<>();
 	        		dataItem.add(date);
@@ -166,6 +177,10 @@ public class DataService {
 	 */
 	public ResultItem LoadData(String fileName, String p, String ratio, String eps, String minpts, String r) {
 		String outputFile = Paths.get(DataCategory, fileName + ".result").toString();
+		
+		File file = new File(outputFile);
+		file.delete();
+		
 		String inputFile = Paths.get(DataCategory, fileName).toString();
 		
 		File input_file = new File(inputFile);
@@ -181,7 +196,7 @@ public class DataService {
 		RuntimeService.RunCommand(command);
 		
 		while (true) {
-			File file = new File(outputFile);
+			file = new File(outputFile);
 			
 			if (file.exists()){
 				try {

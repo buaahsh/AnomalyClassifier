@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-iDBSCAN: improved DBSCAN
-DBSCAN: Density-Based Spatial Clustering of Applications with Noise
+PredictExecutor has two prediction stretaties.
 
 Add Prediction method, it can use the old model to predict new data and update the model
 """

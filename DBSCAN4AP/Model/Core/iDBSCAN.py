@@ -18,6 +18,7 @@ from sklearn.utils import check_array
 from sklearn.neighbors import DistanceMetric
 
 from .PredictExecutor import PredictExecutor
+from .Analysor import Analysor
 
 
 class iDBSCAN(DBSCAN):
@@ -31,6 +32,7 @@ class iDBSCAN(DBSCAN):
         self.num_components_ = 0
         self.num_cache_ = 0
         self.predict_executor = PredictExecutor(min_samples, eps)
+        self.analysor = Analysor(min_samples, eps)
 
     def fit_predict(self, X, y=None, sample_weight=None):
         labels = DBSCAN.fit_predict(self, X, y, sample_weight)
@@ -111,7 +113,9 @@ class iDBSCAN(DBSCAN):
             self.update_components()
         X = check_array(X, accept_sparse='csr')
         labels = self.__radius_neighbors_k_means(X, r)
-        return np.array(labels)
+        labels = np.array(labels)
+        labels = labels / (max(labels) + random.random())
+        return labels
 
     def __radius_neighbors_k_means(self, X, r):
         labels = []
@@ -140,7 +144,8 @@ class iDBSCAN(DBSCAN):
                         self.num_cache_ += 1
             else:
                 cache_dists = dist.pairwise([x], self.cache_components_[:])[0]
-                label = self.__analysis(d, cache_dists)
+                # label = self.__analysis(d, cache_dists)
+                label = self.analysor.analysis(d, cache_dists)
                 if self.cache_update_judge(x, r):
                     labels.append(0)
                 else:

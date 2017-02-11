@@ -48,10 +48,6 @@ class StandardScaler(BaseEstimator, TransformerMixin):
                         estimator=self, dtype=FLOAT_DTYPES)
 
         if sparse.issparse(X):
-            if self.with_mean:
-                raise ValueError(
-                    "Cannot center sparse matrices: pass `with_mean=False` "
-                    "instead. See docstring for motivation and alternatives.")
             if self.with_std:
                 # First pass
                 if not hasattr(self, 'n_samples_seen_'):
@@ -97,10 +93,6 @@ class StandardScaler(BaseEstimator, TransformerMixin):
                         estimator=self, dtype=FLOAT_DTYPES)
 
         if sparse.issparse(X):
-            if self.with_mean:
-                raise ValueError(
-                    "Cannot center sparse matrices: pass `with_mean=False` "
-                    "instead. See docstring for motivation and alternatives.")
             if self.scale_ is not None:
                 inplace_column_scale(X, 1 / self.scale_)
         else:
@@ -115,10 +107,6 @@ class StandardScaler(BaseEstimator, TransformerMixin):
 
         copy = copy if copy is not None else self.copy
         if sparse.issparse(X):
-            if self.with_mean:
-                raise ValueError(
-                    "Cannot uncenter sparse matrices: pass `with_mean=False` "
-                    "instead See docstring for motivation and alternatives.")
             if not sparse.isspmatrix_csr(X):
                 X = X.tocsr()
                 copy = False

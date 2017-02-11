@@ -22,20 +22,6 @@ function init() {
 	});
 }
 
-function select_cat(){
-	$('#select_cat').change(function(){
-		$('#select').empty();
-		var p1=$(this).children('option:selected').val();
-		$.getJSON("/AnomalyPortal/Data?kind=list&dc=" + p1, function(data){
-			$.each(data, function(idx, item){
-				$('#select').append("<option value='" 
-						+ item[1] +  "'> " + item[0] + "</option>");
-			})
-			
-		});
-	});
-}
-
 function select(){
 	$('#submit').click(function(){
 		$('#myPleaseWait').modal('show');
