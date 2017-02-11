@@ -13,11 +13,11 @@ import Model.ResultItem;
 import Model.SeriesItem;
 
 public class DataService {
-//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
-//	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model/Command";
+	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model";
 	
-	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
-	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
+//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+//	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model\\Command";
 	private String DataCategory;
 	
 	public DataService(String dc){	
@@ -174,7 +174,7 @@ public class DataService {
 			return null;
 		}
 		
-		String command = String.format("python %s\\command.py --input %s --output %s --per %s --ratio %s --eps %s --minpt %s --r %s", 
+		String command = String.format("python %s/command.py --input %s --output %s --per %s --ratio %s --eps %s --minpt %s --r %s", 
 				PythonPath, inputFile, outputFile, p, ratio, eps, minpts, r);
 		
 		System.out.println(command);

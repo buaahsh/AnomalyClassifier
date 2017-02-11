@@ -1,0 +1,13 @@
+pingjunyanshi,pingjunyanshi.txt.out
+bj_shibai,bj_shibai.txt.out
+bj_yanshi,bj_yanshi.txt.out
+real1,1.txt.out
+real2,2.txt.out
+real3,4.txt.out
+real4,6.txt.out
+time1,real_52.csv
+time2,real_53.csv
+time3,real_54.csv
+seanson1,synthetic_6.csv.out
+seanson2,synthetic_7.csv.out
+seanson3,synthetic_8.csv.out

@@ -71,7 +71,7 @@ for k, col in zip(unique_labels, colors):
     p2.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
              markeredgecolor='k', markersize=6)
 
-    # p2.title('Test using training data set')
+    # p2.title('Experiment using training data set')
 
 centers = [[1, 1], [-1, -1], [1, -1]]
 
