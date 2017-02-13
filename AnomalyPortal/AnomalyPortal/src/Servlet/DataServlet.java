@@ -13,6 +13,7 @@ import Servlet.Util;
 import com.google.gson.Gson;
 
 import Service.DataService;
+import Service.MultiDataService;
 
 public class DataServlet extends BaseServlet{
 	/**
@@ -53,6 +54,11 @@ public class DataServlet extends BaseServlet{
 			String DataCategory = dataService.getDataCategory();
 			String fileId = request.getParameter("fid");
 			returnFile(request, response, fileId, DataCategory);
+		}
+		else if (kind.equals("multi")) {
+			MultiDataService multiDataService = new MultiDataService(dc);
+//			String fileId = request.getParameter("fid");
+			response.getWriter().write(gson.toJson(multiDataService.LoadData()));
 		}
 	}
 	
