@@ -70,21 +70,26 @@ function plot(series){
             text: ''
         },
         xAxis: {
-            type: 'datetime',
+//            type: 'datetime',
 //            dateTimeLabelFormats: { // don't display the dummy year
 //                month: '%e. %b',
 //                year: '%b'
 //            },
-            title: {
-                text: 'Date'
-            }
+//            title: {
+//                text: 'Date'
+//            }
         },
         yAxis: {
             title: {
-                text: ''
+                text: null
             },
-            min: -50
-        },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }],
+        } 
+        ,
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
             pointFormat: '{point.x:2005/%m/%d %H:%M}<br>{point.y:.2f}'
@@ -109,4 +114,5 @@ function plot(series){
         series: series
     })
     .highcharts(); // return chart
+			
 }
