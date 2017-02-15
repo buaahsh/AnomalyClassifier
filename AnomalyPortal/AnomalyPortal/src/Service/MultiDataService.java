@@ -77,10 +77,11 @@ public class MultiDataService {
         	float x = Float.parseFloat(tokens[0]);
         	
         	for (int i = 0; i < num; i++) {
-        		String color = new String();	        	
-        		float y = Float.parseFloat(tokens[num + 1]);
+        		String color = new String();
+        		float y = Float.parseFloat(tokens[i + 1]);
+        		float l = Float.parseFloat(tokens[num + 1]);
         		
-            	if(y != 0){//是否对异常数据进行标记
+            	if(l != 0){//是否对异常数据进行标记
                      color = "#FF3030";//红色
             	}
             	
@@ -90,5 +91,24 @@ public class MultiDataService {
         }
         br.close();   
 		return items;
+	}
+	
+	public String LoadAna(String x){
+		String fileName = Paths.get(DataCategory, "all.data.ana").toString();
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(fileName);
+			InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
+	        BufferedReader br = new BufferedReader(isr); 
+	        String line = null;
+	        while ((line = br.readLine()) != null) {
+	        	String[] tokens = line.split("\t");
+	        	if (tokens[0].equals(x))
+	        		return tokens[1];
+	        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return "";
 	}
 }

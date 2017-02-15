@@ -15,9 +15,6 @@ function init() {
 					+ item[1] +  "'> " + item[0] + "</option>");
 		})
 		var p1 = $($('#select').children()[0]).val();
-//		$.getJSON("/AnomalyPortal/Data?kind=data&dc=y&fid=" + p1, function(data){
-//			plotNew(data);
-//		});
 	});
 }
 
@@ -49,12 +46,6 @@ function select(){
 		var p1=$('#select').children('option:selected').val();
 		var dc = $('#select_cat').children('option:selected').val();
 		window.location = "/AnomalyPortal/Data?kind=download&dc=" + dc + "&fid=" + p1;
-//		$('#myPleaseWait').modal('show');
-//		var p1=$('#select').children('option:selected').val();
-//		var dc = $('#select_cat').children('option:selected').val();
-//		$.get("/AnomalyPortal/Data?kind=download&dc=" + dc + "&fid=" + p1, function(data){
-//			$('#myPleaseWait').modal('hide');
-//		});
 	});
 }
 
@@ -92,7 +83,7 @@ function plot(series){
         ,
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:2005/%m/%d %H:%M}<br>{point.y:.2f}'
+            pointFormat: '<b>{point.y:.2f}</b><br> at {point.x}'
         },
 
         plotOptions: {      
@@ -106,13 +97,43 @@ function plot(series){
             series:{
             	turboThreshold:600000,
             	events:{
-            		legendItemClick:function(event){return false;}//屏蔽单击图例事件，防止卡顿
-            	}
+//            		legendItemClick:function(event){return false;}//屏蔽单击图例事件，防止卡顿
+            	},
+            	point: {
+                    events: {
+                        click: function () {
+                        	analysis(this.x);
+                        }
+                    }
+                }
             }
         },
 
         series: series
     })
     .highcharts(); // return chart
-			
+}
+
+function analysis(x){
+	$('#container2').empty();
+	$('#myPleaseWait').modal('show');
+	
+	var p1=$('#select').children('option:selected').val();
+	var dc = $('#select_cat').children('option:selected').val();
+	$.get("/AnomalyPortal/Data?kind=ana&dc=" + dc + "&fid=" + p1
+			+ "&x=" + x
+			, function(data){
+		
+		var items = eval(data);
+		var table = '<table class="table table-striped"><thead><tr><th>Name</th><th>Score</th><th>Context</th></tr><tbody>';
+		$.each(items, function(idx, item){
+			var itemob = JSON.parse(item); 
+			table += '<tr><th scope="row">' + itemob.name + '</th>';
+			table += '<td>' + itemob.score + '</td>';
+			table += '<td>' + itemob.context + '</td></tr>';
+		});
+		table += '</tbody></table>';
+		$('#container2').append(table);
+		$('#myPleaseWait').modal('hide');
+	});
 }

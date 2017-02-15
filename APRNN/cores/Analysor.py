@@ -42,10 +42,17 @@ class Analysor():
                     X = dataset[c][i-5: i]
                     x = dataset[c][i]
                     res = self.analysis(X, x)
-                    item = Item(c, res, ','.join([str(it) for it in X]))
-                    items.append(json.dumps(item.__dict__))
+                    item = Item(c, res, ','.join([str(it) for it in X]), x)
+                    items.append(item)
+
+                max_res = max([item.score for item in items ]) + random.random()
+                #refine
+                final_items = []
+                for item in items:
+                    item.score /= max_res
+                    final_items.append(json.dumps(item.__dict__))
                 # refine
-                print('{0},{1}'.format(dataset['Time'][i], json.dumps(items)), file=f_out)
+                print('{0}\t{1}'.format(dataset['Time'][i], json.dumps(final_items)), file=f_out)
 
 
 if __name__ == '__main__':

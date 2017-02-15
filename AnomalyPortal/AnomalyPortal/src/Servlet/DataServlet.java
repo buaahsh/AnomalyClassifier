@@ -59,6 +59,10 @@ public class DataServlet extends BaseServlet{
 			MultiDataService multiDataService = new MultiDataService(dc);
 //			String fileId = request.getParameter("fid");
 			response.getWriter().write(gson.toJson(multiDataService.LoadData()));
+		}else if (kind.equals("ana")) {
+			MultiDataService multiDataService = new MultiDataService(dc);
+			String x = request.getParameter("x");
+			response.getWriter().write(multiDataService.LoadAna(x));
 		}
 	}
 	

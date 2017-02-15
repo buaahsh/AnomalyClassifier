@@ -5,7 +5,8 @@ class Result():
 
 
 class Item():
-    def __init__(self, name, score, context):
+    def __init__(self, name, score, context, current):
         self.name = name
         self.score = score
         self.context = context
+        self.current = current
