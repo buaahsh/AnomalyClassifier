@@ -47,6 +47,8 @@ class Analysor():
                     items.append(item)
 
                 max_res = max([item.score for item in items ]) + random.random()
+
+                items = sorted(items, key=lambda item:item.score, reverse=True)
                 #refine
                 final_items = []
                 for item in items:
