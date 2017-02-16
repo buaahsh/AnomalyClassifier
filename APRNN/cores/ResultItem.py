@@ -1,6 +1,7 @@
 class Result():
-    def __init__(self, degree, items):
-        self.degree = degree
+    def __init__(self, label, score, items):
+        self.label = label
+        self.score = score
         self.items = items
 
 
