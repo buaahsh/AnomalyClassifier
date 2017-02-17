@@ -5,18 +5,7 @@
 
 $(function(){
 	select();
-	init();
 })
-
-function init() {
-	$.getJSON("/AnomalyPortal/Data?kind=list&dc=y", function(data){
-		$.each(data, function(idx, item){
-			$('#select').append("<option value='" 
-					+ item[1] +  "'> " + item[0] + "</option>");
-		})
-		var p1 = $($('#select').children()[0]).val();
-	});
-}
 
 function select(){
 	$('#submit').click(function(){
@@ -24,21 +13,16 @@ function select(){
 //	$('#select').change(function(){
 		var p1=$('#select').children('option:selected').val();
 		var dc = $('#select_cat').children('option:selected').val();
-		var p = $('#p').val();
-//		var ratio = $('#ratio').val();
-		var ratio = 0;
-		var eps = $('#eps').val();
-		var minpts = $('#minpts').val();
-		var r = $('#r').val();
-		$.getJSON("/AnomalyPortal/Data?kind=multi&dc=" + dc + "&fid=" + p1
-				+ "&p=" + p
-				+ "&ratio=" + ratio
-				+ "&eps=" + eps
-				+ "&minpts=" + minpts
-				+ "&r=" + r
+		$.getJSON("/AnomalyPortal/Data?kind=multireal&dc=" + dc + "&fid=" + p1
 				, function(data){
-			plot(data);
-			$('#myPleaseWait').modal('hide');
+			$("#container").empty();
+			plot(data, '#container');
+			$.getJSON("/AnomalyPortal/Data?kind=multi&dc=" + dc + "&fid=" + p1
+					, function(data){
+				$("#container3").empty();
+				plot(data, '#container3');
+				$('#myPleaseWait').modal('hide');
+			});
 		});
 	});
 	
@@ -49,10 +33,10 @@ function select(){
 	});
 }
 
-function plot(series){
-	$('#container').empty();
+function plot(series, id){
+	
 //	Highcharts.setOptions({colors: ['#87ceff','#6b8e23','#4876ff']});
-	var chart = $('#container').highcharts({
+	var chart = $(id).highcharts({
 		chart: {
             type: 'scatter',
 			zoomType: 'x'
@@ -61,14 +45,6 @@ function plot(series){
             text: ''
         },
         xAxis: {
-//            type: 'datetime',
-//            dateTimeLabelFormats: { // don't display the dummy year
-//                month: '%e. %b',
-//                year: '%b'
-//            },
-//            title: {
-//                text: 'Date'
-//            }
         },
         yAxis: {
             title: {
@@ -120,20 +96,24 @@ function analysis(x){
 	
 	var p1=$('#select').children('option:selected').val();
 	var dc = $('#select_cat').children('option:selected').val();
-	$.get("/AnomalyPortal/Data?kind=ana&dc=" + dc + "&fid=" + p1
+	$.getJSON("/AnomalyPortal/Data?kind=ana&dc=" + dc + "&fid=" + p1
 			+ "&x=" + x
 			, function(data){
+		$('#container2').append('<h4>real label:' + data.label + '</h4>');
+		$('#container2').append('<h4>predict score:' + data.score + '</h4>');
 		
-		var items = eval(data);
-		var table = '<table class="table table-striped"><thead><tr><th>Name</th><th>Score</th><th>Context</th></tr><tbody>';
+		var items = data.items;
+		var table = '<table class="table table-striped"><thead><tr><th>Name</th><th>Score</th><th>Current</th><th>Context</th></tr><tbody>';
 		$.each(items, function(idx, item){
 			var itemob = JSON.parse(item); 
 			table += '<tr><th scope="row">' + itemob.name + '</th>';
 			table += '<td>' + itemob.score + '</td>';
+			table += '<td>' + itemob.current + '</td>';
 			table += '<td>' + itemob.context + '</td></tr>';
 		});
 		table += '</tbody></table>';
 		$('#container2').append(table);
 		$('#myPleaseWait').modal('hide');
 	});
+	$('#myPleaseWait').modal('hide');
 }

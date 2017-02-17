@@ -35,18 +35,18 @@ public class MultiDataService {
 		return this.DataCategory;
 	}
 	
-	public Series[] LoadData()
+	public Series[] LoadData(int labelIdx)
 	{
 		String fileName = Paths.get(DataCategory, "all.data").toString();
 		try {
-			return LoadCore(fileName);
+			return LoadCore(fileName, labelIdx);
 		} catch (NumberFormatException | IOException | ParseException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public Series[] LoadCore(String fileName) throws NumberFormatException, IOException, ParseException {
+	public Series[] LoadCore(String fileName, int labelIdx) throws NumberFormatException, IOException, ParseException {
         int num = 13;
         
         FileInputStream fis = new FileInputStream(fileName);
@@ -79,11 +79,15 @@ public class MultiDataService {
         	for (int i = 0; i < num; i++) {
         		String color = new String();
         		float y = Float.parseFloat(tokens[i + 1]);
-        		float l = Float.parseFloat(tokens[num + 1]);
+        		float l = Float.parseFloat(tokens[labelIdx]);
         		
-            	if(l != 0){//是否对异常数据进行标记
-                     color = "#FF3030";//红色
+        		float label = Float.parseFloat(tokens[num + 1]);
+            	if(label == 2){//是否对异常数据进行标记
+            		color = "#FF3030";//红色
             	}
+            	else if(l != 0){
+                    color = "#FFB300";
+           	}
             	
             	items[i].data.add(new Dot(color, x, y));   
 			}
