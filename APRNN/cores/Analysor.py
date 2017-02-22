@@ -7,13 +7,17 @@ from cores.ResultItem import Result, Item
 
 
 class Analysor():
-    def __init__(self, bandwidth):
+    def __init__(self, bandwidth=1):
         self.bandwidth = bandwidth
 
     def analysis(self, X, x, kernel='gaussian'):
-        # X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
+        # min_x = min(X)
+        # X = [i - min_x for i in X]
+        bandwidth = sum(X) / len(X)
+        if bandwidth <= 0:
+            bandwidth = 1
         X = [[i] for i in X]
-        kde = KernelDensity(kernel=kernel, bandwidth=self.bandwidth ).fit(X)
+        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth ).fit(X)
         result = kde.score([x])
         return -result
 
@@ -63,10 +67,14 @@ class Analysor():
 
 
 if __name__ == '__main__':
-    bandwidth = 1
-    a = Analysor(bandwidth)
-    # X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
-    # x = [324, 434]
+    # X = [82, 72, 88, 94, 67]
+    # x = [52] #  5.37
+    # X = np.array([18, 28, 12, 6, 33])
+    # x = [48] #115.028
+    # bandwidth = sum(X) / 5
+    a = Analysor()
+
+
     # print(a.analysis(X, x))
     # x = [34, 4]
     # print(a.analysis(X, x))
