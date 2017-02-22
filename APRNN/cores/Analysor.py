@@ -17,6 +17,8 @@ class Analysor():
         # bandwidth = sum(X) / len(X)
         bandwidth = 0.5
         X = [[i] for i in X]
+        X = X + [[x]]
+        # print(X)
         X = min_max_scaler.fit_transform(X)
         x = min_max_scaler.transform([x])
         # print(X)
@@ -26,7 +28,7 @@ class Analysor():
         return -result
 
     def refine(self, X):
-        x = max(X) + random.random()
+        x = max(X) + random.random() / 10
         X = X / x
         return X
 
@@ -71,15 +73,15 @@ class Analysor():
 
 
 if __name__ == '__main__':
-    # X = [82, 72, 88, 94, 67]
-    # x = [52] #  5.37, 15.6
-    # X = np.array([18, 28, 12, 6, 33])
-    # x = [40] #115.028
-    # X = [511, 511, 511, 511, 511]
-    # x =[511]
-    # X = [11, 11, 11, 11, 11]
-    # x =[11]
-    # bandwidth = sum(X) / 5
+    # X = [439, 439, 451, 443, 459]
+    # x = [459] #  5.37, 15.6
+    # # X = np.array([72, 72, 60, 68, 52])
+    # # x = [52] #115.028
+    # # X = [511, 511, 511, 511, 511]
+    # # x =[511]
+    # # X = [11, 11, 11, 11, 11]
+    # # x =[11]
+    # # bandwidth = sum(X) / 5
     a = Analysor()
 
 
