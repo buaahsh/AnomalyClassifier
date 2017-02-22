@@ -1,4 +1,5 @@
 from sklearn.neighbors.kde import KernelDensity
+from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import numpy as np
 import json
@@ -11,14 +12,17 @@ class Analysor():
         self.bandwidth = bandwidth
 
     def analysis(self, X, x, kernel='gaussian'):
-        # min_x = min(X)
-        # X = [i - min_x for i in X]
-        bandwidth = sum(X) / len(X)
-        if bandwidth <= 0:
-            bandwidth = 1
+        min_max_scaler = MinMaxScaler()
+        # X = [i + 0.01 for i in X]
+        # bandwidth = sum(X) / len(X)
+        bandwidth = 0.5
         X = [[i] for i in X]
-        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth ).fit(X)
-        result = kde.score([x])
+        X = min_max_scaler.fit_transform(X)
+        x = min_max_scaler.transform([x])
+        # print(X)
+        # x = [x]
+        kde = KernelDensity(kernel=kernel, bandwidth=bandwidth).fit(X)
+        result = kde.score(x)
         return -result
 
     def refine(self, X):
@@ -50,7 +54,7 @@ class Analysor():
                     item = Item(c, res, ','.join([str(it) for it in X]), x)
                     items.append(item)
 
-                max_res = max([item.score for item in items ]) + random.random()
+                max_res = max([item.score for item in items]) + random.random()
 
                 items = sorted(items, key=lambda item:item.score, reverse=True)
                 #refine
@@ -68,15 +72,19 @@ class Analysor():
 
 if __name__ == '__main__':
     # X = [82, 72, 88, 94, 67]
-    # x = [52] #  5.37
+    # x = [52] #  5.37, 15.6
     # X = np.array([18, 28, 12, 6, 33])
-    # x = [48] #115.028
+    # x = [40] #115.028
+    # X = [511, 511, 511, 511, 511]
+    # x =[511]
+    # X = [11, 11, 11, 11, 11]
+    # x =[11]
     # bandwidth = sum(X) / 5
     a = Analysor()
 
 
     # print(a.analysis(X, x))
-    # x = [34, 4]
-    # print(a.analysis(X, x))
+    # # x = [34, 4]
+    # # print(a.analysis(X, x))
     file_path = '../data/rubis/rubis.txt.out.re'
     a.pipeline(file_path)
