@@ -111,7 +111,7 @@ public class DataService {
             }
 	        item.points = points;
 	        item.data = data;
-	        
+	        fis.close();
 	    } catch (Exception e) { 
 	        e.printStackTrace(); 
 	    }
@@ -160,7 +160,7 @@ public class DataService {
             }
 	        item.points = points;
 	        item.data = data;
-	        
+	        fis.close();
 	    } catch (Exception e) { 
 	        e.printStackTrace(); 
 	    }
@@ -180,7 +180,7 @@ public class DataService {
 		
 		File file = new File(outputFile);
 		file.delete();
-		
+
 		String inputFile = Paths.get(DataCategory, fileName).toString();
 		
 		File input_file = new File(inputFile);
@@ -200,14 +200,14 @@ public class DataService {
 			
 			if (file.exists()){
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(1500);
 					break;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
