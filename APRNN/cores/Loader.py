@@ -14,7 +14,7 @@ class Loader:
         self.seq_length = seq_length
         self.encoding = encoding
 
-        input_files = os.path.join(data_dir, "raw")
+        input_files = os.path.join(data_dir, "data.txt")
         vocab_file = os.path.join(data_dir, "vocab.pkl")
         tensor_file = os.path.join(data_dir, "feature_data.npy")
 
@@ -27,36 +27,21 @@ class Loader:
         self.create_batches(kind)
         self.reset_batch_pointer()
 
-    def preprocess(self, input_files, vocab_file, tensor_file):
-        files = [f for f in listdir(input_files) if isfile(join(input_files, f))]
-        self.chars = list(map(lambda s: s.split('.')[0], files))
+    def preprocess(self, input_file, vocab_file, tensor_file):
+        self.tensor = pandas.read_csv(input_file)
+
+        self.chars = list(self.tensor.columns)[1:]
         self.vocab_size = len(self.chars)
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         with open(vocab_file, 'wb') as f:
             six.moves.cPickle.dump(self.chars, f)
 
-        self.tensor = self.load_tensor(input_files)
         np.save(tensor_file, self.tensor)
 
-    def load_tensor(self, input_files):
-        tensor = []
-        files = [f for f in listdir(input_files) if isfile(join(input_files, f))]
-        for i, f in enumerate(files):
-            print(f)
-            data = pandas.read_csv(join(input_files, f))
-            l = []
-            l.append(data.Open.tolist())
-            l.append(data.High.tolist())
-            l.append(data.Low.tolist())
-            l.append(data.Close.tolist())
-            l.append(data.Volume.tolist())
-            l = np.transpose(np.array(l))
-            if i == 0:
-                tensor = np.empty(shape=(l.shape[0], len(files), l.shape[1]))
-            if l.shape[0] != tensor.shape[0]:
-                continue
-            tensor[:,i,:] = l
-        return tensor
+    def load_tensor(self, input_file):
+        data = pandas.read_csv(input_file)
+        data = data[data.Label != 2]
+        return data
         # return tensor
 
     def load_preprocessed(self, vocab_file, tensor_file):
@@ -71,25 +56,24 @@ class Loader:
     def create_batches(self, kind):
         print("creating batches")
         if kind == 'normal':
-            self.num_batches = int(self.tensor.shape[0] / (self.batch_size * self.seq_length))
+            self.num_batches = int((self.tensor.shape[0] - self.seq_length + 1) / self.batch_size)
 
             # When the data (tensor) is too small, let's give them a better error message
             if self.num_batches == 0:
                 assert False, "Not enough data. Make seq_length and batch_size small."
 
-            self.tensor = self.tensor[:self.num_batches * self.batch_size * self.seq_length]
-            xdata = self.tensor
-            ydata = np.copy(self.tensor)
+            self.tensor = self.tensor[:self.num_batches * self.batch_size + self.seq_length - 1]
+            xdata = np.array(self.tensor)[:, :-1]
+            ydata = np.array(self.tensor)[:, -1]
 
-            ydata[:-1] = xdata[1:]
-            ydata[-1] = xdata[0]
+            self.x_batches = np.split(self.rolling_window(xdata, self.seq_length), self.num_batches, 0)
+            self.y_batches = np.split(ydata[self.seq_length - 1:], self.num_batches, 0)
 
-            self.x_batches = np.split(xdata, self.num_batches, 0)
-            self.x_batches = np.array([np.split(x, len(x) / self.seq_length, 0) for x in self.x_batches])
-            self.y_batches = np.split(ydata, self.num_batches, 0)
-            self.y_batches = np.array([np.split(x, len(x) / self.seq_length, 0) for x in self.y_batches])
+            self.y_batches = np.reshape(self.y_batches, [self.num_batches, self.batch_size, 1])
 
-        elif kind == 'more2one':
+            print('create batches done')
+
+        elif kind == 'cycle':
             # create movement label
             temp = np.copy(self.tensor[1:])
             temp_label = temp - self.tensor[:-1]
@@ -151,7 +135,7 @@ class Loader:
         data = pandas.read_csv(file_path)
         return np.array(data.Close.tolist())
 
-    def __rolling_window(self, a, window):
+    def rolling_window(self, a, window):
         # shape = [a.shape[0] - window + 1, window] + [a.shape[-1]]
         # strides = a.strides + (a.strides[-1],)
         # return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
@@ -192,9 +176,9 @@ class Loader:
         np.savetxt(output_file, all_data, delimiter=',', fmt='%.3f')
 
 if __name__ == "__main__":
-    data_dir = '../data/stock_5m'
+    data_dir = '../data/rubis_train'
     batch_size = 50
     seq_length = 5
-    data_loader = Loader(data_dir, batch_size, seq_length, kind='more2one')
+    data_loader = Loader(data_dir, batch_size, seq_length, kind='normal')
     print(data_loader.chars)
     # data_loader.write_to_file('tensor_2.txt')
