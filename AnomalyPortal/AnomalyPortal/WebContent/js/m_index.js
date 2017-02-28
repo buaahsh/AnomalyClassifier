@@ -11,8 +11,18 @@ function select(){
 	$('#submit').click(function(){
 		$('#myPleaseWait').modal('show');
 //	$('#select').change(function(){
+		
 		var p1=$('#select').children('option:selected').val();
 		var dc = $('#select_cat').children('option:selected').val();
+		
+		$('#tb_label').empty();
+		if (dc == 'r'){
+			$('#tb_label').append('<a href="http://10.4.13.214:6007/" target="_blank"> TensorBoard</a>');
+		}
+		if (dc == 'i'){
+			$('#tb_label').append('<a href="http://10.4.13.214:6006/" target="_blank"> TensorBoard</a>');
+		}
+			
 		$.getJSON("/AnomalyPortal/Data?kind=multireal&dc=" + dc + "&fid=" + p1
 				, function(data){
 			$("#container").empty();
