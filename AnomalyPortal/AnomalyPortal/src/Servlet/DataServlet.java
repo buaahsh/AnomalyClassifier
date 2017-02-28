@@ -58,12 +58,18 @@ public class DataServlet extends BaseServlet{
 		else if (kind.equals("multi")) {
 			MultiDataService multiDataService = new MultiDataService(dc);
 //			String fileId = request.getParameter("fid");
-			response.getWriter().write(gson.toJson(multiDataService.LoadData(15)));
+			int label = 15;
+			if (dc.equals("te"))
+				label = 10;
+			response.getWriter().write(gson.toJson(multiDataService.LoadData(label)));
 		}
 		else if (kind.equals("multireal")) {
 			MultiDataService multiDataService = new MultiDataService(dc);
 //			String fileId = request.getParameter("fid");
-			response.getWriter().write(gson.toJson(multiDataService.LoadData(14)));
+			int label = 14;
+			if (dc.equals("te"))
+				label = 9;
+			response.getWriter().write(gson.toJson(multiDataService.LoadData(label)));
 		}
 		else if (kind.equals("ana")) {
 			MultiDataService multiDataService = new MultiDataService(dc);

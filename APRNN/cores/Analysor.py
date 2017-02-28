@@ -88,5 +88,5 @@ if __name__ == '__main__':
     # print(a.analysis(X, x))
     # # x = [34, 4]
     # # print(a.analysis(X, x))
-    file_path = '/Users/hsh/Documents/2015/AnomalyClassifier/y_out/i/all.data.out.re'
+    file_path = '/Users/hsh/Documents/2015/AnomalyClassifier/y_out/te/all.data.re'
     a.pipeline(file_path)

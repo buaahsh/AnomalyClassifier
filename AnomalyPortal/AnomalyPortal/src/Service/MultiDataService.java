@@ -20,11 +20,11 @@ import Model.Series;
 import Model.SeriesItem;
 
 public class MultiDataService {
-//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
-//	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model";
+	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model";
 	
-	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
-	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model";
+//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+//	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model";
 	private String DataCategory;
 	
 	public MultiDataService(String dc){	
@@ -48,6 +48,8 @@ public class MultiDataService {
 	
 	public Series[] LoadCore(String fileName, int labelIdx) throws NumberFormatException, IOException, ParseException {
         int num = 13;
+        if(labelIdx < num)
+        	num = 8;
         
         FileInputStream fis = new FileInputStream(fileName);
         InputStreamReader isr = new InputStreamReader(fis, "UTF-8"); 
@@ -67,8 +69,12 @@ public class MultiDataService {
         int j = 0; 
         while ((line = br.readLine()) != null) {
         	j += 1;
-        	if(j % 10 != 0)
-        		continue;
+        	if(num != 8)
+        	{
+        		if(j % 10 != 0)
+        			continue;
+        	}
+        		
         	// Filter the first line
         	if (line.startsWith("Server") || line.trim().isEmpty())
         		continue;
