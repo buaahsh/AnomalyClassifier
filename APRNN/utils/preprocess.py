@@ -10,5 +10,6 @@ def time2id(file_path):
                 i += 1
 
 if __name__ == "__main__":
-    file_path = '../data/rubis/rubis.txt'
+    # file_path = '../data/rubis/rubis.txt'
+    file_path = 'C:\\Users\\Shaohan\\Desktop\\ibm_t\\all.data'
     time2id(file_path)
