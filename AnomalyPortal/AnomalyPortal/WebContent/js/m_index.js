@@ -22,6 +22,9 @@ function select(){
 		if (dc == 'i'){
 			$('#tb_label').append('<a href="http://10.4.13.214:6006/" target="_blank"> TensorBoard</a>');
 		}
+		if (dc == 'te'){
+			$('#tb_label').append('<a href="http://10.4.13.214:6008/" target="_blank"> TensorBoard</a>');
+		}
 			
 		$.getJSON("/AnomalyPortal/Data?kind=multireal&dc=" + dc + "&fid=" + p1
 				, function(data){

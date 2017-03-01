@@ -20,11 +20,11 @@ import Model.Series;
 import Model.SeriesItem;
 
 public class MultiDataService {
-	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
-	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model";
+//	public static String RootPath = "/Users/hsh/Documents/2015/AnomalyClassifier/y_out";
+//	private static String PythonPath = "/Users/hsh/Documents/2015/AnomalyClassifier/DBSCAN4AP/Model";
 	
-//	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
-//	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model";
+	private static String RootPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\y_out";	
+	private static String PythonPath = "C:\\Users\\Shaohan\\Documents\\project\\anomaly_detection\\AnomalyClassifier\\DBSCAN4AP\\Model";
 	private String DataCategory;
 	
 	public MultiDataService(String dc){	
