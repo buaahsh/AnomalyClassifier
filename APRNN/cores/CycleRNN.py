@@ -16,9 +16,9 @@ import numpy as np
 class Model:
     def __init__(self, args, infer=False):
         self.args = args
-        if infer:
-            args.batch_size = 1
-            # args.seq_length = 1
+        # if infer:
+        #     args.batch_size = 1
+        #     args.seq_length = 1
 
         if args.model == 'rnn':
             cell_fn = rnn_cell.BasicRNNCell
@@ -29,59 +29,80 @@ class Model:
         else:
             raise Exception("model type not supported: {}".format(args.model))
 
-        cell = cell_fn(args.rnn_size, state_is_tuple=True)
+        args.num_layers = 1
+
+        # cell = cell_fn(args.rnn_size, state_is_tuple=True)
+        cell = cell_fn(args.rnn_size)
 
         self.cell = cell = rnn_cell.MultiRNNCell([cell] * args.num_layers, state_is_tuple=True)
 
-        self.input_data = tf.placeholder(tf.float32, [args.batch_size, args.seq_length, args.vocab_size, args.feature_size])
-        self.targets = tf.placeholder(tf.int32, [args.batch_size, args.vocab_size])
+        self.output_size = 1
+
+        self.input_data = tf.placeholder(tf.float32, [args.batch_size, args.seq_length, args.vocab_size])
+        self.input_cycle_data = tf.placeholder(tf.float32, [args.batch_size, args.seq_length, args.vocab_size])
+
+        self.targets = tf.placeholder(tf.int32, [args.batch_size, self.output_size])
 
         self.initial_state = cell.zero_state(args.batch_size, tf.float32)
 
         self.vocab_size = args.vocab_size
 
-        with tf.variable_scope('rnnlm'):
-            # initial_state = tf.get_variable("initial_state", [args.batch_size, args.rnn_size])
-            softmax_w = tf.get_variable("softmax_w", [args.rnn_size, args.vocab_size])
-            softmax_b = tf.get_variable("softmax_b", [args.vocab_size])
+        # merged_summary_op = tf.merge_all_summaries()
+        # summary_writer = tf.train.SummaryWriter('/tmp/mnist_logs', sess.graph)
 
-            embedding_w = tf.get_variable("element_wise_embedding_w", [args.vocab_size, args.feature_size])
-            embedding_b = tf.get_variable("element_wise_embedding_b", [args.vocab_size])
-            embedding = tf.get_variable("element_wise_embedding", [args.vocab_size, args.rnn_size])
+        with tf.variable_scope('rnn_input'):
+            input_w = tf.get_variable("input_w", [args.vocab_size, args.rnn_size])
+            input_b = tf.get_variable("input_b", [args.rnn_size])
 
-            # flat_input = tf.reshape(self.input_data, [-1, args.feature_size])
-            # xw = tf.matmul(flat_input, tf.transpose(embedding_w)) + embedding_b
-            # mask = tf.matrix_diag(tf.ones(shape=self.input_data.get_shape()[:-1]))
-            #
-            # masked = tf.matmul(tf.reshape(mask, xw.get_shape()), tf.transpose(xw))
-            # embedding_lookup = tf.reshape(tf.reduce_sum(masked, 1), self.input_data.get_shape()[:-1])
+            flat_input = tf.reshape(self.input_data, [-1, args.vocab_size])
 
-            flat_input = tf.reshape(self.input_data, [-1, args.feature_size])
-            embedding_w = tf.tile(embedding_w, tf.constant([args.batch_size * args.seq_length, 1]))
-            xw = tf.reduce_sum(tf.multiply(flat_input, embedding_w), 1)
-            embedding_b = tf.tile(embedding_b, tf.constant([args.batch_size * args.seq_length]))
-            embedding_lookup = xw + embedding_b
+            flat_input = tf.matmul(flat_input, input_w) + input_b
 
-            # embedding_lookup = tf.nn.dropout(embedding_lookup, 0.8)
+            flat_input = tf.reshape(flat_input, [args.batch_size, args.seq_length, args.rnn_size])
 
-            embedding_lookup = tf.reshape(tf.matmul(tf.reshape(embedding_lookup, [-1, args.vocab_size]), embedding),
-                       [args.batch_size, args.seq_length, args.rnn_size])
-
-            print(embedding_lookup)
-            # inputs = tf.split(1, args.seq_length, tf.nn.embedding_lookup(embedding, self.input_data))
-
-            inputs = tf.split(1, args.seq_length, embedding_lookup)
+            # flat_input: shape: args.batch_size, args.seq_length, args.rnn_size
+            inputs = tf.split(1, args.seq_length, flat_input)
             inputs = [tf.squeeze(input_, [1]) for input_ in inputs]
-            self.embedding = embedding
 
-        outputs, last_state = self.rnn_encode(inputs, self.initial_state, cell, scope='rnnlm')
-        output = tf.reshape(tf.concat(1, outputs), [-1, args.rnn_size])
-        self.logits = tf.sigmoid(tf.matmul(output, softmax_w) + softmax_b)
+        with tf.variable_scope('rnn_hidden'):
+            outputs, last_state = self.rnn_average_encode(inputs, self.initial_state, cell, scope='rnn_hidden')
+
+        with tf.variable_scope('rnn_cyc_input'):
+            cyc_input_w = tf.get_variable("input_cyc_w", [args.vocab_size, args.rnn_size])
+            cyc_input_b = tf.get_variable("input_cyc_b", [args.rnn_size])
+
+            cyc_flat_input = tf.reshape(self.input_cycle_data, [-1, args.vocab_size])
+
+            cyc_flat_input = tf.matmul(cyc_flat_input, cyc_input_w) + cyc_input_b
+
+            cyc_flat_input = tf.reshape(cyc_flat_input, [args.batch_size, args.seq_length, args.rnn_size])
+
+            # flat_input: shape: args.batch_size, args.seq_length, args.rnn_size
+            cyc_inputs = tf.split(1, args.seq_length, cyc_flat_input)
+            cyc_inputs = [tf.squeeze(input_, [1]) for input_ in cyc_inputs]
+
+        with tf.variable_scope('rnn_cyc_hidden'):
+            cyc_outputs, last_state = self.rnn_average_encode(cyc_inputs, self.initial_state, cell, scope='rnn_cyc_hidden')
+
+
+        with tf.variable_scope('rnn_output'):
+            output = tf.reshape(tf.concat(1, outputs), [-1, args.rnn_size])
+            cyc_output = tf.reshape(tf.concat(1, cyc_outputs), [-1, args.rnn_size])
+            output = tf.concat(1,[output, cyc_output])
+
+            softmax_w = tf.get_variable("softmax_w", [args.rnn_size * 2, self.output_size])
+            softmax_b = tf.get_variable("softmax_b", [self.output_size])
+            # self.logits = tf.sigmoid(tf.matmul(output, softmax_w) + softmax_b)
+            self.logits = tf.matmul(output, softmax_w) + softmax_b
 
         loss = tf.reduce_mean(
-            tf.square(tf.sub(self.logits, tf.to_float(tf.reshape(self.targets, [-1, args.vocab_size])))))
+            tf.square(tf.sub(self.logits, tf.to_float(self.targets))))
 
         self.cost = loss
+
+        tf.histogram_summary('loss_act', loss)
+        tf.scalar_summary('loss', loss)
+
         self.accuracy = self.compute_accuracy(self.logits, self.targets)
 
         self.final_state = last_state
@@ -91,6 +112,23 @@ class Model:
                                           args.grad_clip)
         optimizer = tf.train.AdamOptimizer(self.lr)
         self.train_op = optimizer.apply_gradients(zip(grads, tvars))
+
+        self.merged = tf.merge_all_summaries()
+
+    def rnn_average_encode(self, encoder_inputs, initial_state, cell, scope=None):
+        with variable_scope.variable_scope(scope or "rnn_average_encode"):
+            state = initial_state
+            output = None
+            all_output = None
+            for i, inp in enumerate(encoder_inputs):
+                if i > 0:
+                    variable_scope.get_variable_scope().reuse_variables()
+                output, state = cell(inp, state)
+                if all_output == None:
+                    all_output =output
+                else:
+                    all_output += output
+            return all_output, state
 
     def rnn_encode(self, encoder_inputs, initial_state, cell, scope=None):
         with variable_scope.variable_scope(scope or "rnn_encoder"):
@@ -104,8 +142,8 @@ class Model:
 
     def compute_accuracy(self, logit, target):
         sign_logit = tf.cast(tf.greater(logit, 0.5), tf.int32)
-        int_target = tf.to_int32(tf.reshape(target, [-1, self.vocab_size]))
-        return tf.contrib.metrics.accuracy(sign_logit, int_target)
+        # int_target = tf.to_int32(tf.reshape(target, [-1, self.vocab_size]))
+        return tf.contrib.metrics.accuracy(sign_logit, target)
 
     def test(self, sess, data_loader, start_id, seq_length):
         accu = 0
