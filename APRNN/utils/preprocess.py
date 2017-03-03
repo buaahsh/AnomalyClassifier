@@ -17,17 +17,22 @@ def load_label():
     list_file = os.listdir(file_path)
     _dict = {}
     for item in list_file:
+        if not item.endswith('label'):
+            continue
         a_file_path = file_path + '/' + item
         with open(a_file_path, 'r') as f_in:
             for line in f_in:
-                tokens = line.split(',')
-                id = int(tokens[0])
-                if float(tokens[-2]) > 0:
+                # tokens = line.split(',')
+                if line.strip():
+                    id = int(line)
+                    print(id)
                     _dict[id] = '2'
                     for i in range(id - 6, id):
                         if i >= 0:
-                            _dict[i] = '1'
+                            if i not in _dict:
+                                _dict[i] = '1'
     print(len(_dict))
+    print(_dict)
     return _dict
 
 def merge_data():
@@ -36,6 +41,8 @@ def merge_data():
     list_file = os.listdir(file_path)
     _data = []
     for item in list_file:
+        if not item.endswith('.txt'):
+            continue
         a_file_path = file_path + '/' + item
         one_data = []
         with open(a_file_path, 'r') as f_in:
@@ -53,8 +60,8 @@ def merge_data():
                     print(i)
                     return
                 one_line.append(_data[j][i-1])
-            if (i-1) in _dict:
-                one_line.append(_dict[i-1])
+            if i in _dict:
+                one_line.append(_dict[i])
             else:
                 one_line.append('0')
             print >>f_out, ','.join(one_line)

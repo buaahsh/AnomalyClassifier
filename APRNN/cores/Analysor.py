@@ -44,7 +44,7 @@ class Analysor():
         with open(file_path + '.ana', 'w') as f_out:
             print('Time,Info')
             for i in range(width, len(dataset['Time'])):
-                if dataset['Score'][i] == 0:
+                if dataset['Score'][i] == 0 and dataset['Label'][i] == 0:
                     continue
                 items = []
                 for c in dataset.columns:
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     # print(a.analysis(X, x))
     # # x = [34, 4]
     # # print(a.analysis(X, x))
-    file_path = '/Users/hsh/Documents/2015/AnomalyClassifier/y_out/te/all.data.re'
+    file_path = '/Users/hsh/Documents/2015/AnomalyClassifier/y_out/te/all.data'
     a.pipeline(file_path)
